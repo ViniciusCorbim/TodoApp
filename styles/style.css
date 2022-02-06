@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+:root{
+    /*-----Fonts-----*/
+    --fontOne: 'Josefin Sans', sans-serif;
+
+    /*-----Primary-Colors-----*/
+    --primaryColor1: hsl(220, 98%, 61%); /*Bright Blue*/
+    --backgroundColor: linear-gradient(hsl(192, 100%, 67%) to hsl(280, 87%, 65%));
+
+    /*----------------Dark-Theme----------------*/
+    --colorDark1: hsl(235, 21%, 11%); /* Very Dark Blue */
+    --colorDark2: hsl(235, 24%, 19%); /* Very Dark Desaturated Blue */
+    --colorDark3: hsl(234, 39%, 85%); /* Light Grayish Blue */
+    --colorDark4: hsl(236, 33%, 92%); /* Light Grayish Blue (hover) */
+    --colorDark5: hsl(234, 11%, 52%); /* Dark Grayish Blue */
+    --colorDark6: hsl(233, 14%, 35%); /* Very Dark Grayish Blue */
+    --colorDark7: hsl(237, 14%, 26%); /* Very Dark Grayish Blue */
+
+    /*---------------Light-Theme---------------*/
+    --colorLight1: hsl(0, 0%, 98%);    /* Very Light Gray */
+    --colorLight2: hsl(236, 33%, 92%); /* Very Light Grayish Blue */
+    --colorLight3: #c2c3c5; /* Light Grayish Blue */
+    --colorLight4: hsl(236, 9%, 61%);  /* Dark Grayish Blue */
+    --colorLight5: hsl(235, 19%, 35%); /* Very Dark Grayish Blue */
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--fontOne);
+    transition: background-color 0.3s cubic-bezier(0.69, 0.28, 1, 0.26), background 0.3s cubic-bezier(0.69, 0.28, 1, 0.26), border 0.2s cubic-bezier(0.69, 0.28, 1, 0.26), color 0.35s cubic-bezier(0.69, 0.28, 1, 0.26);
+}
+body{
+    background-image: url(../images/bg-desktop-dark.jpg);
+    background-repeat: no-repeat;
+    background-color: var(--colorDark1);
+}
+body.darkMode{
+    background-image: url(../images/bg-desktop-dark.jpg);
+    background-repeat: no-repeat;
+    background-color: var(--colorDark1);
+}
+body.lightMode{
+    background-image: url(../images/bg-desktop-light.jpg);
+    background-repeat: no-repeat;
+    background-color: var(--colorLight2);
+}
+main{
+    margin: 70px auto 0;
+    width: 550px;
+}
+div.title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3em;
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 35px;
+}
+h1{
+    letter-spacing: 0.6em;
+}
+img#IconMode{
+    cursor: pointer;
+}
+img#IconMode.AnimationA{
+    animation-name: IConMode;
+    animation-duration: 350ms;
+    animation-direction: alternate;
+    animation-iteration-count: 2;
+}
+
+@keyframes IConMode{
+    from{
+        transform: scale(1);
+    }
+    to{
+        transform: scale(0);
+    }
+}
+
+div.circle{
+    min-width: 35px;
+    min-height: 35px;
+    border-radius: 50%;
+    border: 2px solid var(--colorDark7);
+    transition: none;
+}
+input#newTodo{
+    background-color: transparent;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    color: var(--colorDark4);
+    width: 85%;
+}
+input#newTodo.darkMode{
+    color: var(--colorDark4);
+}
+input#newTodo.lightMode{
+    color: var(--colorLight5);
+}
+input#newTodo::placeholder{
+    font-size: 20px;
+    color: var(--colorDark5);
+    opacity: 0.9;
+}
+input#newTodo.darkMode::placeholder{
+    color: var(--colorDark5);
+}
+input#newTodo.lightMode::placeholder{
+    color: var(--colorLight4);
+}
+div.createTodo, div.DivTodoItem{
+    padding: 18px 25px 18px;
+    display: flex;
+    gap: 25px;
+}
+div.createTodo, div#container{
+    border-radius: 7px;
+}
+div.createTodo.lightMode,div#container.lightMode{
+    background-color: var(--colorLight1);
+}
+div.createTodo.darkMode,div#container.darkMode{
+    background-color: var(--colorDark2);
+}
+div.createTodo.darkMode div.circle{
+    border: 2px solid var(--colorDark7);
+}
+div.createTodo.lightMode div.circle{
+    border: 2px solid var(--colorLight3);
+}
+
+div.createTodo{
+    margin-bottom: 22px;
+    box-shadow: 0px 20px 35px 10px hsl(0deg 0% 0% / 22%);
+}
+div.createTodo.lightMode{
+    margin-bottom: 22px;
+    box-shadow: 0px 20px 35px 10px hsl(0deg 0% 0% / 10%);
+}
+div#container.darkMode{
+    box-shadow: 0px 35px 31px 10px hsl(0deg 0% 0% / 33%), 0px 7px 11px 2px rgb(0 0 0 / 18%);
+}
+div#container.lightMode{
+    box-shadow: 0px 35px 31px 10px hsl(0deg 0% 0% / 7%), 0px 7px 11px 2px rgb(0 0 0 / 5%);
+}
+
+div.DivTodoItem{
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    color: var(--colorDark3);
+    border-bottom: 1px solid var(--colorDark7);
+    position: relative;
+}
+div.DivTodoItem.active.darkMode{
+    color: var(--colorDark3);
+    border-bottom: 1px solid var(--colorDark7);
+}
+div.DivTodoItem.active.lightMode{
+    color: var(--colorLight5);
+    border-bottom: 1px solid var(--colorLight3);
+    text-shadow: 0px 0px 0px rgb(0 0 0);
+}
+
+div.DivTodoItem.completed.darkMode{
+    color: var(--colorDark3);
+    border-bottom: 1px solid var(--colorDark7);
+}
+div.DivTodoItem.completed.lightMode{
+    color: var(--colorLight5);
+    border-bottom: 1px solid var(--colorLight3);
+}
+
+div.circle.TodoItem, div.DivTodoItem p.TodoItem{
+    cursor: pointer;
+}
+p.TodoItem{
+    overflow: hidden;
+    line-height: 1.5em;
+    margin-right: 25px;
+}
+img.iconCross{
+    position: absolute;
+    cursor: pointer;
+    left: 93%;
+    display: none;
+}
+img.iconCross.Visible{
+    display: block;
+    opacity: 0.5;
+}
+img.iconCross.Visible:hover{
+    display: block;
+    opacity: 1;
+}
+div.DivTodoItem.active > div.circle.TodoItem:hover{
+    background: linear-gradient(var(--colorDark2), var(--colorDark2)) padding-box, linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 1.85px;
+}
+div.DivTodoItem.active.darkMode > div.circle.TodoItem:hover{
+    background: linear-gradient(var(--colorDark2), var(--colorDark2)) padding-box, linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;
+}
+div.DivTodoItem.active.lightMode > div.circle.TodoItem:hover{
+    background: linear-gradient(var(--colorLight1), var(--colorLight1)) padding-box, linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;
+}
+div.DivTodoItem.completed > div.circle.TodoItem{
+    background-image: url(../images/icon-check.svg), linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: none !important;
+}
+div.DivTodoItem.lightMode > div.circle.TodoItem{
+    border: 2px solid var(--colorLight3);
+}
+div.DivTodoItem.completed.darkMode > p.TodoItem{
+    color: var(--colorDark6);
+    text-decoration: line-through;
+}
+div.DivTodoItem.completed.lightMode > p.TodoItem{
+    color: var(--colorLight3);
+    text-decoration: line-through;
+    text-shadow: 0px 0px 0px rgb(0 0 0 / 66%);
+}
+
+div.t3fs{
+    padding: 18px 0 18px;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-around;
+    color: var(--colorDark5);
+    font-weight: 700;
+}
+div.t3fs span, div.t3fs p{
+    transition: none;
+}
+div.menu{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.spanActiveVisible{
+    color: var(--primaryColor1) !important;
+    font-weight: 400  !important;
+}
+
+div.notVisible{
+    display: none;
+}
+
+div.menu span:hover{
+    color: var(--colorDark4);
+    cursor: pointer;
+}
+div.menu.darkMode span:hover{
+    color: var(--colorDark4);
+    cursor: pointer;
+}
+div.menu.lightMode span:hover{
+    color: var(--colorLight5);
+    cursor: pointer;
+}
+
+p#clearComplete.darkMode:hover{
+    color: var(--colorDark3);
+    cursor: pointer;
+}
+p#clearComplete.lightMode:hover{
+    color: var(--colorLight5);
+    cursor: pointer;
+}
+div.t3fs.darkMode p{
+    color: var(--colorDark6);
+}
+div.t3fs.lightMode p{
+    color: var(--colorLight4);
+    text-shadow: 0px 0px 0px rgb(0 0 0);
+    font-weight: normal;
+}
+p.psoe{
+    margin: 50px 0 50px;
+    text-align: center;
+    color: var(--colorDark6);
+}
+
+
+.attribution { 
+    font-size: 16px; text-align: center;
+    color: var(--colorDark5);
+    margin-bottom: 50px;
+    line-height: 1.5em;
+}
+.attribution.lightMode{
+    color: var(--colorLight5);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.212);
+}
+.attribution a { color: var(--primaryColor1); }
+
+
+@media(hover: none){
+    img.iconCross{
+        display: block;
+        opacity: 0.7;
+    }
+
+    div.DivTodoItem.active > div.circle.TodoItem:hover{
+        background: transparent !important;
+    }
+
+    div.DivTodoItem.darkMode div.circle{
+        border: 2px solid var(--colorDark7) !important;
+    }
+    div.DivTodoItem.lightMode div.circle{
+        border: 2px solid var(--colorLight3) !important;
+    }
+
+
+    p#clearComplete.darkMode:hover{
+        color: var(--colorDark6);
+    }
+    p#clearComplete.lightMode:hover{
+        color: var(--colorLight4);
+        cursor: pointer;
+    }
+
+    p#clearComplete.darkMode.touch{
+        color: var(--colorDark3);
+    }
+    p#clearComplete.lightMode.touch{
+        color: var(--colorLight5);
+    } 
+}
+
+@media(max-width: 600px) {
+    /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+    body{
+        font-size: 16px;
+    }
+    main{
+        width: 80vw;
+    }
+    div#container.lightMode{
+        box-shadow: 0px 35px 31px 10px hsl(0deg 0% 0% / 7%), 0px 7px 11px 2px rgb(0 0 0 / 5%);
+    }
+    img.iconCross{
+        display: block;
+        opacity: 0.7;
+        left: 92%;
+    }
+    div.t3fs{
+        position: relative;
+        font-size: 15px;
+    }
+    div.menu{
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        position: absolute;
+        top: 140%;
+        width: 80vw;
+        padding: 14px 0 14px;
+        border-radius: 7px;
+        
+        background-color: var(--colorDark2);
+        box-shadow: 0px 35px 31px 10px hsl(0deg 0% 0% / 33%);
+    }
+    div.menu.lightMode{
+        background-color: var(--colorLight1);
+        box-shadow: 0px 35px 31px 10px hsl(0deg 0% 0% / 10%);
+    }
+    p.psoe {
+        margin: 120px 0 50px;
+        text-align: center;
+        color: var(--colorDark6);
+    }
+}
+
+@media (max-width: 500px){
+    h1{
+        letter-spacing: 0.3em;
+    }
+    main{
+        width: 90vw;
+    }
+}
+
+@media(max-width: 375px){
+    body{
+        background-image: url(../images/bg-mobile-dark.jpg);
+        background-repeat: no-repeat;
+        background-color: var(--colorDark1);
+    }
+    body.darkMode{
+        background-image: url(../images/bg-mobile-dark.jpg);
+        background-repeat: no-repeat;
+        background-color: var(--colorDark1);
+    }
+    body.lightMode{
+        background-image: url(../images/bg-mobile-light.jpg);
+        background-repeat: no-repeat;
+        background-color: var(--colorLight2);
+    }
+    main{
+        margin: 30px auto 0;
+        width: 95vw;
+    }
+
+    div.menu{
+        padding: 14px 3px 14px;
+    }
+
+    div.title { margin-bottom: 20px; }
+    div.createTodo { margin-bottom: 18px; }
+}
+
+@media(max-width: 300px){
+    div.t3fs{
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    img.iconCross{
+        left: 90%;
+    }
+    p.TodoItem{
+        overflow: visible;
+    }
+    h1{
+        letter-spacing: normal;
+    }
+}

@@ -39,7 +39,7 @@ function loadBody () {
         imgIconCross.setAttribute('alt', 'icon-cross');
         imgIconCross.setAttribute('class', 'iconCross');
         imgIconCross.addEventListener('click', clearTodo);
-        imgIconCross.addEventListener('touchstart', clearTodo);
+        imgIconCross.addEventListener('touchend', clearTodo);
 
         DivTodo.setAttribute('class', 'DivTodoItem');
         DivTodo.addEventListener('mouseover', IconCrossVisible);
@@ -193,7 +193,7 @@ inputNewTodo.addEventListener('keypress', function(e){
     imgIconCross.setAttribute('alt', 'icon-cross');
     imgIconCross.setAttribute('class', 'iconCross');
     imgIconCross.addEventListener('click', clearTodo);
-    imgIconCross.addEventListener('touchstart', clearTodo);
+    imgIconCross.addEventListener('touchend', clearTodo);
 
     DivTodo.setAttribute('class', 'DivTodoItem active');
     DivTodo.id = 'item'+ToDos.length;

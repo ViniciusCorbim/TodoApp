@@ -202,7 +202,7 @@ div.DivTodoItem.active > div.circle.TodoItem:hover{
     background: linear-gradient(var(--colorDark2), var(--colorDark2)) padding-box, linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;
     border-color: transparent;
     border-style: solid;
-    border-width: 1.85px;
+    border-width: 2px;
 }
 div.DivTodoItem.active.darkMode > div.circle.TodoItem:hover{
     background: linear-gradient(var(--colorDark2), var(--colorDark2)) padding-box, linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;

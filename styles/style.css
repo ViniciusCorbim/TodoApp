@@ -416,8 +416,11 @@ p.psoe{
         background-color: var(--colorLight2);
     }
     main{
-        margin: 30px auto 0;
-        width: 95vw;
+        margin: 50px auto 0;
+        width: 88vw;
+    }
+    h1{
+        font-size: 35px;
     }
 
     div.menu{
@@ -427,7 +430,11 @@ p.psoe{
     div.title { margin-bottom: 20px; }
     div.createTodo { margin-bottom: 18px; }
 }
-
+@media(max-width: 345px){
+    main{
+        width: 94vw;
+    }
+}
 @media(max-width: 300px){
     div.t3fs{
         flex-wrap: wrap;

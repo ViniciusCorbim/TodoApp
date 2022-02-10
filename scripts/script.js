@@ -18,6 +18,12 @@ function touchEnd() {
       clearComplete.classList.remove('touch');
 }
 
+function hasTouch() {
+    return 'ontouchstart' in document.documentElement
+           || navigator.maxTouchPoints > 0
+           || navigator.msMaxTouchPoints > 0;
+  }
+
 let ToDos = [
     {text: 'Jog around the park 3x', active: false, id: 'item0'},
     {text: '10 minutes meditation', active: true, id: 'item1'},
@@ -45,9 +51,15 @@ function loadBody () {
         DivTodo.addEventListener('mouseover', IconCrossVisible);
         DivTodo.addEventListener('mouseout', IconCrossNotVisible);
         DivCircle.setAttribute('class', 'circle TodoItem active');
-        DivCircle.addEventListener('click', markTodo);
+
+        if(hasTouch()){
+            DivCircle.addEventListener('touchend', markTodo);
+            pTodo.addEventListener('touchend', markTodo);
+        }else{
+            DivCircle.addEventListener('click', markTodo);
+            pTodo.addEventListener('click', markTodo);
+        }
         pTodo.setAttribute('class', 'TodoItem');
-        pTodo.addEventListener('click', markTodo);
 
         pTodo.innerHTML = ToDos[i].text;
 
@@ -200,9 +212,16 @@ inputNewTodo.addEventListener('keypress', function(e){
     DivTodo.addEventListener('mouseover', IconCrossVisible);
     DivTodo.addEventListener('mouseout', IconCrossNotVisible);
     DivCircle.setAttribute('class', 'circle TodoItem active');
-    DivCircle.addEventListener('click', markTodo);
+
+    if(hasTouch()){
+        DivCircle.addEventListener('touchend', markTodo);
+        pTodo.addEventListener('touchend', markTodo);
+    }else{
+        DivCircle.addEventListener('click', markTodo);
+        pTodo.addEventListener('click', markTodo);
+    }
+
     pTodo.setAttribute('class', 'TodoItem');
-    pTodo.addEventListener('click', markTodo);
     pTodo.innerHTML = inputNewTodo.value;
 
     let pTodoDocument = document.querySelectorAll('p.TodoItem');
@@ -250,9 +269,16 @@ function markTodo() {
         }
     }
 
-    for(let i = 0; i < children.length; i++){
-        children[i].removeEventListener('click',markTodo);
-        children[i].addEventListener('click',markOffTodo);
+    if(hasTouch()){
+        for(let i = 0; i < children.length; i++){
+            children[i].removeEventListener('touchend',markTodo);
+            children[i].addEventListener('touchend',markOffTodo);
+        }
+    }else{
+        for(let i = 0; i < children.length; i++){
+            children[i].removeEventListener('click',markTodo);
+            children[i].addEventListener('click',markOffTodo);
+        }
     }
     countActivesTodo ();
 
@@ -271,16 +297,30 @@ function markTodo() {
             break;
     }
     const imgIconCross = document.querySelector('img.iconCross.Visible');
-    imgIconCross.removeEventListener('click',markTodo);
-    imgIconCross.removeEventListener('click',markOffTodo);
+
+    if(hasTouch()){
+        imgIconCross.removeEventListener('touchend',markTodo);
+        imgIconCross.removeEventListener('touchend',markOffTodo);
+    }else{
+        imgIconCross.removeEventListener('click',markTodo);
+        imgIconCross.removeEventListener('click',markOffTodo);
+    }
 }
 
 function markOffTodo () {
     let children = this.parentNode.children;
     this.parentNode.setAttribute('class', 'DivTodoItem active');
-    for(let i = 0; i < children.length; i++){
-        children[i].removeEventListener('click',markOffTodo);
-        children[i].addEventListener('click', markTodo);
+
+    if(hasTouch()){
+        for(let i = 0; i < children.length; i++){
+            children[i].removeEventListener('touchend',markOffTodo);
+            children[i].addEventListener('touchend', markTodo);
+        }
+    }else{
+        for(let i = 0; i < children.length; i++){
+            children[i].removeEventListener('click',markOffTodo);
+            children[i].addEventListener('click', markTodo);
+        }
     }
 
     for(let i=0; i<ToDos.length ; i++){
@@ -308,8 +348,13 @@ function markOffTodo () {
     }
 
     const imgIconCross = document.querySelector('img.iconCross.Visible');
-    imgIconCross.removeEventListener('click',markTodo);
-    imgIconCross.removeEventListener('click',markOffTodo);
+    if(hasTouch()){
+        imgIconCross.removeEventListener('touchend',markTodo);
+        imgIconCross.removeEventListener('touchend',markOffTodo);
+    }else{
+        imgIconCross.removeEventListener('click',markTodo);
+        imgIconCross.removeEventListener('click',markOffTodo);
+    }
 }
 
 function countActivesTodo (){

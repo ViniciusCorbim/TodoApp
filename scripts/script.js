@@ -31,6 +31,7 @@ let ToDos = [
     {text: 'Pick up groceries', active: true, id: 'item3'},
     {text: 'Complete Todo App on Frontend Mentor', active: true, id: 'item4'}
 ]
+//localStorage.setItem('todoList', JSON.stringify(ToDos));
 
 function loadBody () {
     ToDos = getItem();
@@ -51,14 +52,6 @@ function loadBody () {
         DivTodo.addEventListener('mouseover', IconCrossVisible);
         DivTodo.addEventListener('mouseout', IconCrossNotVisible);
         DivCircle.setAttribute('class', 'circle TodoItem active');
-
-        if(hasTouch()){
-            DivCircle.addEventListener('touchend', markTodo);
-            pTodo.addEventListener('touchend', markTodo);
-        }else{
-            DivCircle.addEventListener('click', markTodo);
-            pTodo.addEventListener('click', markTodo);
-        }
         pTodo.setAttribute('class', 'TodoItem');
 
         pTodo.innerHTML = ToDos[i].text;
@@ -66,9 +59,23 @@ function loadBody () {
         if(ToDos[i].active){
             DivTodo.classList.add('active');
             DivTodo.setAttribute('id', ToDos[i].id);
+            if(hasTouch()){
+                DivCircle.addEventListener('touchend', markTodo);
+                pTodo.addEventListener('touchend', markTodo);
+            }else{
+                DivCircle.addEventListener('click', markTodo);
+                pTodo.addEventListener('click', markTodo);
+            }
         }else{
             DivTodo.classList.add('completed');
             DivTodo.setAttribute('id', ToDos[i].id);
+            if(hasTouch()){
+                DivCircle.addEventListener('touchend', markOffTodo);
+                pTodo.addEventListener('touchend', markOffTodo);
+            }else{
+                DivCircle.addEventListener('click', markOffTodo);
+                pTodo.addEventListener('click', markOffTodo);
+            }
         }
 
         inputNewTodo.focus();

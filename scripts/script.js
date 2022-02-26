@@ -319,13 +319,13 @@ function markTodo() {
     }
     const imgIconCross = document.querySelector('img.iconCross.Visible');
 
-    if(hasTouch()){
+    /*if(hasTouch()){
         imgIconCross.removeEventListener('touchend',markTodo);
         imgIconCross.removeEventListener('touchend',markOffTodo);
     }else{
         imgIconCross.removeEventListener('click',markTodo);
         imgIconCross.removeEventListener('click',markOffTodo);
-    }
+    }*/
     localStorage.setItem('CacheClear', false);
 }
 
@@ -370,13 +370,13 @@ function markOffTodo () {
     }
 
     const imgIconCross = document.querySelector('img.iconCross.Visible');
-    if(hasTouch()){
+    /*if(hasTouch()){
         imgIconCross.removeEventListener('touchend',markTodo);
         imgIconCross.removeEventListener('touchend',markOffTodo);
     }else{
         imgIconCross.removeEventListener('click',markTodo);
         imgIconCross.removeEventListener('click',markOffTodo);
-    }
+    }*/
     localStorage.setItem('CacheClear', false);
 }
 
@@ -536,11 +536,7 @@ DivContainerTodos.addEventListener('mousemove', reorganizarToDos);
 DivContainerTodos.addEventListener('mousedown', reorganizarToDos);
 DivContainerTodos.addEventListener('mouseup', reorganizarToDos);
 
-//Eventos TouchScreen
-DivContainerTodos.addEventListener('touchstart', reorganizarToDos);
-DivContainerTodos.addEventListener('touchend', reorganizarToDos);
-DivContainerTodos.addEventListener('touchmove', reorganizarToDos);
-DivContainerTodos.addEventListener('touchcancel', reorganizarToDos);
+
 function reorganizarToDos(){
     let allTodo = document.querySelectorAll('div.DivTodoItem');
     ToDos = getItem();
@@ -557,7 +553,38 @@ function reorganizarToDos(){
                         }
                     }
                     setItem ();
+                    localStorage.setItem('CacheClear', false);
                 }}
         }, 200);
     }
   }
+
+  //Eventos TouchScreen
+DivContainerTodos.addEventListener('touchstart', reorganizaToDosPhone);
+DivContainerTodos.addEventListener('touchend', reorganizaToDosPhone);
+DivContainerTodos.addEventListener('touchmove', reorganizaToDosPhone);
+DivContainerTodos.addEventListener('touchcancel', reorganizaToDosPhone);
+
+function reorganizaToDosPhone () {
+    reorganizarToDos();
+
+    setTimeout(function() {
+        reorganizarToDos();
+    }, 200);
+
+    setTimeout(function() {
+        reorganizarToDos();
+    }, 400);
+
+    setTimeout(function() {
+        reorganizarToDos();
+    }, 600);
+
+    setTimeout(function() {
+        reorganizarToDos();
+    }, 800);
+
+    setTimeout(function() {
+        reorganizarToDos();
+    }, 1000);
+}

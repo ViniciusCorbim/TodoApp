@@ -56,7 +56,8 @@
   <script>
     const dragArea = document.querySelector('div#containerTodo');
     new Sortable(dragArea, {
-      animation: 350
+      animation: 350,
+      handle: '.DivTodoItem'
     });
   </script>
 </body>

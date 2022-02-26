@@ -8,6 +8,7 @@ let spanCompleted = document.getElementById('spanCompleted');
 let clearComplete = document.getElementById('clearComplete');
 let visible = 0;
 let modeVar = false;  // true - Modo Escuro   e   false - Modo Claro
+let CacheDoNavegadorLimpo;
 
 clearComplete.addEventListener('touchstart', touchStart);
 clearComplete.addEventListener('touchend', touchEnd);
@@ -34,7 +35,19 @@ let ToDos = [
 //localStorage.setItem('todoList', JSON.stringify(ToDos));
 
 function loadBody () {
-    ToDos = getItem();
+    CacheDoNavegadorLimpo = localStorage.getItem('CacheClear');
+    if(CacheDoNavegadorLimpo == 'false' && getItem() != []){
+        ToDos = getItem();
+    }else{
+        ToDos = [
+            {text: 'Jog around the park 3x', active: false, id: 'item0'},
+            {text: '10 minutes meditation', active: true, id: 'item1'},
+            {text: 'Read for 1 hour', active: true, id: 'item2'},
+            {text: 'Pick up groceries', active: true, id: 'item3'},
+            {text: 'Complete Todo App on Frontend Mentor', active: true, id: 'item4'}
+        ]
+        localStorage.setItem('todoList', JSON.stringify(ToDos));
+    }
 
     for(let i=0; i<ToDos.length; i++){
         let DivTodo = document.createElement('div');
@@ -263,6 +276,7 @@ inputNewTodo.addEventListener('keypress', function(e){
     }
 
     PushToDo (pTodo.innerText, true);
+    localStorage.setItem('CacheClear', false);
 });
 
 function markTodo() {
@@ -312,6 +326,7 @@ function markTodo() {
         imgIconCross.removeEventListener('click',markTodo);
         imgIconCross.removeEventListener('click',markOffTodo);
     }
+    localStorage.setItem('CacheClear', false);
 }
 
 function markOffTodo () {
@@ -362,6 +377,7 @@ function markOffTodo () {
         imgIconCross.removeEventListener('click',markTodo);
         imgIconCross.removeEventListener('click',markOffTodo);
     }
+    localStorage.setItem('CacheClear', false);
 }
 
 function countActivesTodo (){
@@ -470,6 +486,7 @@ function ClearCompleteTodo () {
             }
         })
     }
+    localStorage.setItem('CacheClear', false);
 }
 
 function clearTodo () {
@@ -483,9 +500,8 @@ function clearTodo () {
         }
     })
     countActivesTodo ();
+    localStorage.setItem('CacheClear', false);
 }
-
-
 
 const getItem = () => JSON.parse(localStorage.getItem('todoList')) ?? [];
 
@@ -513,12 +529,18 @@ function SliceToDo (index) {
     setItem ();
 }
 
-
+//Eventos do Mouse
 DivContainerTodos.addEventListener('mouseenter', reorganizarToDos);
 DivContainerTodos.addEventListener('mouseout', reorganizarToDos);
 DivContainerTodos.addEventListener('mousemove', reorganizarToDos);
 DivContainerTodos.addEventListener('mousedown', reorganizarToDos);
 DivContainerTodos.addEventListener('mouseup', reorganizarToDos);
+
+//Eventos TouchScreen
+DivContainerTodos.addEventListener('touchstart', reorganizarToDos);
+DivContainerTodos.addEventListener('touchend', reorganizarToDos);
+DivContainerTodos.addEventListener('touchmove', reorganizarToDos);
+DivContainerTodos.addEventListener('touchcancel', reorganizarToDos);
 function reorganizarToDos(){
     let allTodo = document.querySelectorAll('div.DivTodoItem');
     ToDos = getItem();
@@ -526,18 +548,16 @@ function reorganizarToDos(){
         setTimeout(function() {
                 if(allTodo.length == ToDos.length){
                     if(allTodo[i].id !== ToDos[i].id){
-                //console.log(allTodo[i].innerText);
-                //console.log(ToDos[i].text);
-                console.log("Evento de Reorganizar os ToDos ativo");
-                for(let i=0; i<allTodo.length; i++){
-                    if(allTodo[i].classList.contains("active") == true){
-                        ToDos[i] = {text: allTodo[i].innerText, active: true, id: allTodo[i].id};
-                    }else{
-                        ToDos[i] = {text: allTodo[i].innerText, active: false, id: allTodo[i].id};
+                    console.log("Evento de Reorganizar os ToDos ativo");
+                    for(let i=0; i<allTodo.length; i++){
+                        if(allTodo[i].classList.contains("active") == true){
+                            ToDos[i] = {text: allTodo[i].innerText, active: true, id: allTodo[i].id};
+                        }else{
+                            ToDos[i] = {text: allTodo[i].innerText, active: false, id: allTodo[i].id};
+                        }
                     }
-                }
-                setItem ();
-            }}
+                    setItem ();
+                }}
         }, 200);
     }
   }

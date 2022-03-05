@@ -280,6 +280,10 @@ inputNewTodo.addEventListener('keypress', function(e){
 });
 
 function markTodo() {
+    if(x === 1){
+        x = 0;
+        return;
+    }
     let children = this.parentNode.children;
     this.parentNode.setAttribute('class', 'DivTodoItem completed');
 
@@ -330,6 +334,11 @@ function markTodo() {
 }
 
 function markOffTodo () {
+    if(x === 1){
+        x = 0;
+        return;
+    }
+
     let children = this.parentNode.children;
     this.parentNode.setAttribute('class', 'DivTodoItem active');
 
@@ -544,7 +553,6 @@ function reorganizarToDos(){
         setTimeout(function() {
                 if(allTodo.length == ToDos.length){
                     if(allTodo[i].id !== ToDos[i].id){
-                    console.log("Evento de Reorganizar os ToDos ativo");
                     for(let i=0; i<allTodo.length; i++){
                         if(allTodo[i].classList.contains("active") == true){
                             ToDos[i] = {text: allTodo[i].innerText, active: true, id: allTodo[i].id};
@@ -563,6 +571,7 @@ function reorganizarToDos(){
 DivContainerTodos.addEventListener('touchstart', reorganizaToDosPhone);
 DivContainerTodos.addEventListener('touchend', reorganizaToDosPhone);
 DivContainerTodos.addEventListener('touchmove', reorganizaToDosPhone);
+DivContainerTodos.addEventListener('touchmove', CancelEventMarkTodo);
 DivContainerTodos.addEventListener('touchcancel', reorganizaToDosPhone);
 
 function reorganizaToDosPhone () {
@@ -587,4 +596,20 @@ function reorganizaToDosPhone () {
     setTimeout(function() {
         reorganizarToDos();
     }, 1000);
+}
+
+
+//O usuário pode reorganizar e marcar/desmarcar um ToDo ao mesmo tempo, e nisso a ação de reorganizar é cancelada
+//Para resolver isso eu cancelei a ação de marcar/desmarcar quando ocorrer um evento touchmove
+//quando a variável x valer 1, os evento markTodo e MarkOffTodo serão encerrados no inicio e a variável x receberá o valor 0
+//e quando o usuário remover o dedo a variável x também receberá 0
+function CancelEventMarkTodo () {
+    x = 1;
+    DivContainerTodos.addEventListener('touchend', ReactivateEventMarkTodo);
+}
+let x = 0;
+
+function ReactivateEventMarkTodo () {
+    x = 0;
+    DivContainerTodos.removeEventListener('touchend', ReactivateEventMarkTodo);
 }

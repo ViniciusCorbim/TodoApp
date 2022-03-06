@@ -285,7 +285,8 @@ function markTodo() {
         return;
     }
     let children = this.parentNode.children;
-    this.parentNode.setAttribute('class', 'DivTodoItem completed');
+    this.parentNode.classList.remove('active');
+    this.parentNode.classList.add('completed');
 
     for(let i=0; i<ToDos.length ; i++){
         if(ToDos[i].id == this.parentNode.id){
@@ -324,10 +325,6 @@ function markTodo() {
     }
 
     localStorage.setItem('CacheClear', false);
-
-    setTimeout(function() {
-        countActivesTodo ();
-    }, 200);
 }
 
 function markOffTodo () {
@@ -337,7 +334,8 @@ function markOffTodo () {
     }
 
     let children = this.parentNode.children;
-    this.parentNode.setAttribute('class', 'DivTodoItem active');
+    this.parentNode.classList.add('active');
+    this.parentNode.classList.remove('completed');
 
     if(hasTouch()){
         for(let i = 0; i < children.length; i++){
@@ -376,16 +374,14 @@ function markOffTodo () {
     }
 
     localStorage.setItem('CacheClear', false);
-
-    setTimeout(function() {
-        countActivesTodo ();
-    }, 200);
 }
 
 function countActivesTodo (){
-    let ActivesTodo = document.querySelectorAll('div.DivTodoItem.active');
-    let numberItensLeft = document.getElementById('numberItensLeft');
-    numberItensLeft.innerHTML = ActivesTodo.length;
+    for(let i=0; i<10; i++){
+        let ActivesTodo = document.querySelectorAll('div.DivTodoItem.active');
+        let numberItensLeft = document.getElementById('numberItensLeft');
+        numberItensLeft.innerHTML = ActivesTodo.length;
+    }
 }
 
 

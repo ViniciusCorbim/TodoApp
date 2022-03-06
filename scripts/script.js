@@ -305,6 +305,7 @@ function markTodo() {
             children[i].addEventListener('click',markOffTodo);
         }
     }
+
     countActivesTodo ();
 
     if(modeVar){
@@ -321,16 +322,12 @@ function markTodo() {
         case 2: completedVisible ();
             break;
     }
-    const imgIconCross = document.querySelector('img.iconCross.Visible');
 
-    /*if(hasTouch()){
-        imgIconCross.removeEventListener('touchend',markTodo);
-        imgIconCross.removeEventListener('touchend',markOffTodo);
-    }else{
-        imgIconCross.removeEventListener('click',markTodo);
-        imgIconCross.removeEventListener('click',markOffTodo);
-    }*/
     localStorage.setItem('CacheClear', false);
+
+    setTimeout(function() {
+        countActivesTodo ();
+    }, 200);
 }
 
 function markOffTodo () {
@@ -378,15 +375,11 @@ function markOffTodo () {
             break;
     }
 
-    const imgIconCross = document.querySelector('img.iconCross.Visible');
-    /*if(hasTouch()){
-        imgIconCross.removeEventListener('touchend',markTodo);
-        imgIconCross.removeEventListener('touchend',markOffTodo);
-    }else{
-        imgIconCross.removeEventListener('click',markTodo);
-        imgIconCross.removeEventListener('click',markOffTodo);
-    }*/
     localStorage.setItem('CacheClear', false);
+
+    setTimeout(function() {
+        countActivesTodo ();
+    }, 200);
 }
 
 function countActivesTodo (){

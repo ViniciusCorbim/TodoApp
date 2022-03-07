@@ -325,6 +325,10 @@ function markTodo() {
     }
 
     localStorage.setItem('CacheClear', false);
+
+    setTimeout(function() {
+        countActivesTodo ();
+    }, 200);
 }
 
 function markOffTodo () {
@@ -374,6 +378,10 @@ function markOffTodo () {
     }
 
     localStorage.setItem('CacheClear', false);
+
+    setTimeout(function() {
+        countActivesTodo ();
+    }, 200);
 }
 
 function countActivesTodo (){

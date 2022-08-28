@@ -44,3 +44,51 @@ function changeMode () {
         changeModeButton.addEventListener("click", changeMode);
     }, 700);
 }
+
+
+//-----------------------------Criar um Novo Todo-----------------------------//
+const inputNewTodo = document.getElementById('newTodo');
+const divContainerTodos = document.getElementById('containerTodoList');
+//O evento keypress é acionado sempre que uma tecla for pressionada.
+inputNewTodo.addEventListener('keypress', createNewTodo);
+
+//Função que cria um novo todo.
+function createNewTodo (e) {
+    //A função apenas continuará se a tecla Enter for pressionada e o Input não estiver vázio.
+    const keycode = e.keyCode;
+    if(keycode != 13 || inputNewTodo.value == ''){
+        return
+    }
+    
+    //Cria todos os elementos presentes em uma Div Todo.
+    const divTodo = document.createElement('div');
+    const divCircle = document.createElement('div');
+    const pTodo = document.createElement('p');
+    const imgIconCross = document.createElement('img');
+
+    //Seta os Atributos da Div container.
+    divTodo.setAttribute('class', 'DivTodoItem active');
+
+    //Seta os Atributos da Div Circle.
+    divCircle.setAttribute('class', 'circle TodoItem active');
+
+    //Seta os Atributos do Paragrafo da Div Todo.
+    pTodo.setAttribute('class', 'TodoItem');
+    pTodo.innerHTML = inputNewTodo.value;
+
+    //Seta os Atributos da Imagem Cross.
+    imgIconCross.src = 'images/icon-cross.svg';
+    imgIconCross.setAttribute('alt', 'icon-cross');
+    imgIconCross.setAttribute('class', 'iconCross');
+
+
+    //Coloca todos os elementos do Todo dentro da Div container.
+    //Coloca a Div container dentro dentro do corpo do HTML, na Div que contém todos os Todo.
+    divTodo.appendChild(divCircle);
+    divTodo.appendChild(pTodo);
+    divTodo.appendChild(imgIconCross);
+    divContainerTodos.appendChild(divTodo);
+
+    //Limpa o valor do Input
+    inputNewTodo.value = '';
+}

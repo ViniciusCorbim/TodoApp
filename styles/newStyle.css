@@ -127,14 +127,14 @@ img.iconCross{
     position: absolute;
     cursor: pointer;
     left: 93%;
-    display: none;
+    opacity: 0.5;
+    display: block;
 }
 div.DivTodoItem:hover ~ .iconCross{
     display: block !important;
 }
-img.iconCross.Visible{
+img.iconCross.visible{
     display: block;
-    opacity: 0.5;
 }
 img.iconCross:hover{
     display: block;

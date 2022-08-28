@@ -1,13 +1,15 @@
+//Armazena a imagem IconMode em uma variável
+// esta imagem se comporta como um botão devido ao evento click/touchscreen
 let mode = document.getElementById('IconMode');
-let inputNewTodo = document.getElementById('newTodo');
-const DivContainerTodos = document.getElementById('containerTodo');
+let inputNewTodo = document.getElementById('newTodo');//Pega o Input NewTodo
+const DivContainerTodos = document.getElementById('containerTodo');//Pega a div que armazena os Todo
 
 let spanAll = document.getElementById('spanAll');
 let spanActive = document.getElementById('spanActive');
 let spanCompleted = document.getElementById('spanCompleted');
 let clearComplete = document.getElementById('clearComplete');
 let visible = 0;
-let modeVar = false;  // true - Modo Escuro   e   false - Modo Claro
+let modeVar = false;  // true - Dark Mode   e   false - Light Mode
 let CacheDoNavegadorLimpo;
 
 clearComplete.addEventListener('touchstart', touchStart);

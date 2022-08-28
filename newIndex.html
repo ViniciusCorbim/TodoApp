@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <title>Frontend Mentor | Todo app</title>
+  <link id="modeCSS" rel="stylesheet" href="styles/lightMode.css">
+  <link rel="stylesheet" href="styles/newStyle.css">
+</head>
+<body>
+  <main>
+    <div class="title">
+      <h1>Todo</h1>
+      <button id="buttonMode"><img src="images/icon-moon.svg" id="iconMode" alt="Icon-Sun"></button>
+    </div>
+
+    <section>
+      <div class="createTodo">
+        <div class="circle"></div>
+        <input type="text" placeholder="Create a new todo..." id="newTodo">
+      </div>
+
+      <div id="containerTodoListAndMenu">
+        <div id="containerTodoList">
+          <div class="DivTodoItem completed" id="item0">
+            <div class="circle TodoItem completed"></div>
+            <p class="TodoItem">Jog around the park 3x</p>
+            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross" draggable="false">
+          </div>
+
+          <div class="DivTodoItem active" id="item1">
+            <div class="circle TodoItem active"></div>
+            <p class="TodoItem">10 minutes meditation</p>
+            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross">
+          </div>
+
+          <div class="DivTodoItem active" id="item2">
+            <div class="circle TodoItem active"></div>
+            <p class="TodoItem">Read for 1 hour</p>
+            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross">
+          </div>
+
+          <div class="DivTodoItem active" id="item3">
+            <div class="circle TodoItem active"></div>
+            <p class="TodoItem">Pick up groceries</p>
+            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross">
+          </div>
+          
+          <div class="DivTodoItem active" id="item4">
+            <div class="circle TodoItem active"></div>
+            <p class="TodoItem">Complete Todo App on Frontend Mentor</p>
+            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross">
+          </div>
+        </div>
+
+        <div class="menu">
+          <p id="PNumberItensLeft"><span id="numberItensLeft">4</span> items left</p>
+          <div class="buttonsDisplayTodo">
+            <button id="buttonAll">All</button>
+            <button id="buttonActive">Active</button>
+            <button id="buttonCompleted">Completed</button>
+          </div>
+          <button id="buttonClearComplete">Clear Completed</button>
+        </div>
+      </div>
+    </section>
+    <p class="psoe">Drag and drop to reorder list</p>
+
+    <div class="attribution">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank"><strong>Frontend
+          Mentor</strong></a>.
+      Coded by <a href="https://github.com/ViniciusCorbim" target="_blank"><strong>Vinicius Corbim</strong></a>.
+    </div>
+  </main>
+  <script src="scripts/newScript.js"></script>
+</body>
+</html>

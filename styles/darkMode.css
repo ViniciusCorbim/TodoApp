@@ -1,0 +1,17 @@
+:root{
+    --imageURL: url('../images/bg-desktop-dark.jpg');
+    --boxShadow: 0px 35px 31px 10px hsl(0deg 0% 0% / 33%), 0px 7px 11px 2px rgb(0 0 0 / 18%);
+
+    /*-----Primary-Colors-----
+    --primaryColor1: hsl(220, 98%, 61%); /*Bright Blue
+    --backgroundColor: linear-gradient(hsl(192, 100%, 67%) to hsl(280, 87%, 65%));*/
+
+    --colorBackground: hsl(235, 21%, 11%);
+    --primaryColor1: hsl(220, 98%, 61%);
+    --color1: hsl(235, 24%, 19%);
+    --color2: hsl(236, 33%, 92%);/*hsl(235, 32%, 92%)*/
+    --color3: hsl(233, 14%, 35%);/*hsl(237, 14%, 26%)*/
+    --color4: hsl(234, 11%, 52%);
+    --color5: hsl(234, 39%, 85%);/*hsl(234, 39%, 85%)*/
+    --color6: hsl(233, 14%, 35%);
+}

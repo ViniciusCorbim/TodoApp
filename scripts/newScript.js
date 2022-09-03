@@ -46,6 +46,7 @@ function changeMode () {
 }
 
 
+let allTodo = [];
 //-----------------------------Criar um Novo Todo-----------------------------//
 const inputNewTodo = document.getElementById('newTodo');
 const divContainerTodos = document.getElementById('containerTodoList');
@@ -60,26 +61,38 @@ function createNewTodo (e) {
         return
     }
     
+    allTodo.push(new Todo(inputNewTodo.value))
+    console.log(allTodo);
+
     //Cria todos os elementos presentes em uma Div Todo.
     const divTodo = document.createElement('div');
     const divCircle = document.createElement('div');
     const pTodo = document.createElement('p');
     const imgIconCross = document.createElement('img');
 
-    //Seta os Atributos da Div container.
-    divTodo.setAttribute('class', 'DivTodoItem active');
+    //Seta os Atributos e Funções da Div container.
+    divTodo.classList.add('divTodoItem');
+    divTodo.classList.add('active');
+    divTodo.setAttribute('id', allTodo[allTodo.length - 1].id);
+    divTodo.addEventListener("mouseover", iconCross);
+    divTodo.addEventListener("mouseout", iconCross);
 
     //Seta os Atributos da Div Circle.
-    divCircle.setAttribute('class', 'circle TodoItem active');
+    divCircle.classList.add('circle');
+    divCircle.classList.add('todoItem');
+    divCircle.classList.add('active');
+    divCircle.addEventListener('click', markTodo);
 
     //Seta os Atributos do Paragrafo da Div Todo.
-    pTodo.setAttribute('class', 'TodoItem');
+    pTodo.classList.add('todoItem')
+    pTodo.addEventListener('click', markTodo);
     pTodo.innerHTML = inputNewTodo.value;
 
     //Seta os Atributos da Imagem Cross.
     imgIconCross.src = 'images/icon-cross.svg';
     imgIconCross.setAttribute('alt', 'icon-cross');
-    imgIconCross.setAttribute('class', 'iconCross');
+    imgIconCross.classList.add('iconCross');
+    imgIconCross.addEventListener('click', deleteTodo);
 
 
     //Coloca todos os elementos do Todo dentro da Div container.
@@ -88,7 +101,101 @@ function createNewTodo (e) {
     divTodo.appendChild(pTodo);
     divTodo.appendChild(imgIconCross);
     divContainerTodos.appendChild(divTodo);
+    allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
 
     //Limpa o valor do Input
     inputNewTodo.value = '';
+
+    displayTodoActive ();//Atualiza a quantidade de itens ativos.
+}
+//{text: ,completed: , }
+class Todo{
+    constructor(text){
+        this.text = text;
+        this.completed = false;
+        this.id = "item"+(allTodoDocument.length + 1);
+    }
+}
+
+
+//---------------------Icone de Cruz Vísivel e Não Vísivel---------------------//
+//O ícone da cruz, responsável por apagar o todo, só fica vísivel quando o usuário passa o mouse por cima da div do Todo
+let allTodoDocument = document.querySelectorAll('div.divTodoItem');
+for(let i=0; i < allTodoDocument.length; i++){
+    allTodoDocument[i].addEventListener('mouseover', iconCross);
+    allTodoDocument[i].addEventListener('mouseout', iconCross);
+}
+function iconCross () {
+    const children = this.children;
+    for(let i=0; i < children.length; i++){
+        if(children[i].classList.contains('iconCross')){
+            //Se o ícone já tiver a classe "visible", então essa é removida, caso contrário, é adicionada.
+            children[i].classList.toggle('visible');
+        }
+    }
+}
+
+
+//-------------------------Marcar e Desmarcar um Todo-------------------------//
+for(let i=0; i < allTodoDocument.length; i++){
+    const children = allTodoDocument[i].children;
+    for(let i=0; i < children.length; i++){
+        if (children[i].classList.contains("todoItem")) {
+            children[i].addEventListener('click', markTodo);
+        }
+    }
+}
+function markTodo() {
+    if (this.parentNode.classList.contains('active')) {
+        this.parentNode.classList.remove('active');
+        this.parentNode.classList.add('completed');
+        //Altera o valor da propriedade "completed" para true.
+        for(let i=0; i < allTodo.length; i++){
+            if(allTodo[i].id == this.parentNode.id){
+                allTodo[i].completed = true;
+            }
+        }
+    }else if(this.parentNode.classList.contains('completed')){
+        this.parentNode.classList.remove('completed');
+        this.parentNode.classList.add('active');
+        //Altera o valor da propriedade "completed" para false.
+        for(let i=0; i < allTodo.length; i++){
+            if(allTodo[i].id == this.parentNode.id){
+                allTodo[i].completed = false;
+            }
+        }
+    }
+    console.log(allTodo);
+    displayTodoActive ();//Atualiza a quantidade de itens ativos.
+}
+
+
+for(let i=0; i < allTodoDocument.length; i++){
+    const children = allTodoDocument[i].children;
+    for(let i=0; i < children.length; i++){
+        if (children[i].classList.contains("iconCross")) {
+            children[i].addEventListener('click', deleteTodo);
+        }
+    }
+}
+function deleteTodo () {
+    const id = this.parentNode.id;
+    divContainerTodos.removeChild(this.parentNode);
+    allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+
+    allTodo.forEach(function(valor, index){
+        if(valor.id == id){
+            allTodo.splice(index, 1);
+        }
+    })
+    console.log(allTodo);
+    displayTodoActive ();//Atualiza a quantidade de itens ativos.
+}
+
+
+//--------------------Atualiza a Quantidade de Itens Ativos--------------------//
+function displayTodoActive () {
+    const numberItensLeft = document.getElementById('numberItensLeft');
+    const activeTodo = document.querySelectorAll('div.divTodoItem.active');
+    numberItensLeft.innerHTML = activeTodo.length;
 }

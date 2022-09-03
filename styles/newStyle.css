@@ -58,7 +58,7 @@ div.createTodo, div#containerTodoListAndMenu{
     border-radius: 7px;
     background-color: var(--color1);
 }
-div.createTodo, div.DivTodoItem{
+div.createTodo, div.divTodoItem{
     padding: 18px 25px 18px;
     display: flex;
     gap: 25px;
@@ -67,7 +67,7 @@ div.createTodo{
     margin-bottom: 22px;
     box-shadow: 0px 20px 35px 10px hsl(0deg 0% 0% / 22%);
 }
-div.DivTodoItem{
+div.divTodoItem{
     display: flex;
     align-items: center;
     gap: 26px;
@@ -98,27 +98,27 @@ input#newTodo::placeholder{
 }
 
 
-div.circle.TodoItem, div.DivTodoItem p.TodoItem{
+div.circle.todoItem, div.divTodoItem p.todoItem{
     cursor: pointer;
 }
-div.DivTodoItem.completed > div.circle.TodoItem {
+div.divTodoItem.completed > div.circle.todoItem {
     background-image: url(../images/icon-check.svg), linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%));
     background-repeat: no-repeat;
     background-position: center center;
     border: none !important;
 }
-div.DivTodoItem.completed > p.TodoItem {
+div.divTodoItem.completed > p.todoItem {
     color: var(--color3);
     text-decoration: line-through;
     text-shadow: 0px 0px 0px rgb(0 0 0 / 66%);
 }
-div.DivTodoItem.active > div.circle.TodoItem:hover {
+div.divTodoItem.active > div.circle.todoItem:hover {
     background: linear-gradient(var(--color1), var(--color1)) padding-box, linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;
     border-color: transparent;
     border-style: solid;
     border-width: 2px;
 }
-p.TodoItem{
+p.todoItem{
     overflow: hidden;
     line-height: 1.5em;
     margin-right: 25px;
@@ -128,10 +128,7 @@ img.iconCross{
     cursor: pointer;
     left: 93%;
     opacity: 0.5;
-    display: block;
-}
-div.DivTodoItem:hover ~ .iconCross{
-    display: block !important;
+    display: none;
 }
 img.iconCross.visible{
     display: block;

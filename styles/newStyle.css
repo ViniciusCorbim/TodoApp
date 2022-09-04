@@ -98,6 +98,9 @@ input#newTodo::placeholder{
 }
 
 
+div.notVisible{
+    display: none;
+}
 div.circle.todoItem, div.divTodoItem p.todoItem{
     cursor: pointer;
 }
@@ -164,6 +167,10 @@ div.buttonsDisplayTodo{
     justify-content: space-between;
     gap: 20px;
     font-weight: 700;
+}
+.buttonVisible{
+    color: var(--primaryColor1) !IMPORTANT;
+    font-weight: normal !IMPORTANT;
 }
 
 

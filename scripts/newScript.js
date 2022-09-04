@@ -106,6 +106,7 @@ function createNewTodo (e) {
     //Limpa o valor do Input
     inputNewTodo.value = '';
 
+    todoVisible (visibleTodo);
     displayTodoActive ();//Atualiza a quantidade de itens ativos.
 }
 //{text: ,completed: , }
@@ -163,13 +164,15 @@ function markTodo() {
             if(allTodo[i].id == this.parentNode.id){
                 allTodo[i].completed = false;
             }
-        }
+        }  
     }
     console.log(allTodo);
+    todoVisible (visibleTodo);
     displayTodoActive ();//Atualiza a quantidade de itens ativos.
 }
 
 
+//---------------------Deletar um Todo qualquer ou todos os Todo Completados---------------------//
 for(let i=0; i < allTodoDocument.length; i++){
     const children = allTodoDocument[i].children;
     for(let i=0; i < children.length; i++){
@@ -183,13 +186,27 @@ function deleteTodo () {
     divContainerTodos.removeChild(this.parentNode);
     allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
 
-    allTodo.forEach(function(valor, index){
-        if(valor.id == id){
+    allTodo.forEach(function(value, index){
+        if(value.id == id){
             allTodo.splice(index, 1);
         }
     })
     console.log(allTodo);
     displayTodoActive ();//Atualiza a quantidade de itens ativos.
+}
+
+const buttonClearAllCompletedTodo = document.getElementById('buttonClearComplete');
+buttonClearAllCompletedTodo.addEventListener('click', deleteAllCompletedTodo);
+function deleteAllCompletedTodo () {
+    const allcompletedTodo = document.querySelectorAll('div.divTodoItem.completed');
+    allcompletedTodo.forEach(function(value){
+        divContainerTodos.removeChild(value);
+        allTodo.forEach(function(valueAll, index){
+            if(valueAll.id == value.id){
+                allTodo.splice(index, 1);
+            }
+        })
+    })
 }
 
 
@@ -198,4 +215,58 @@ function displayTodoActive () {
     const numberItensLeft = document.getElementById('numberItensLeft');
     const activeTodo = document.querySelectorAll('div.divTodoItem.active');
     numberItensLeft.innerHTML = activeTodo.length;
+}
+
+
+let visibleTodo = 'all';
+const buttonAllVisible = document.getElementById('buttonAll');
+const buttonActiveVisible = document.getElementById('buttonActive');
+const buttonCompleted = document.getElementById('buttonCompleted');
+buttonAllVisible.addEventListener('click', function () {todoVisible ("all")});
+buttonActiveVisible.addEventListener('click', function () {todoVisible ("active")});
+buttonCompleted.addEventListener('click', function () {todoVisible ("completed")});
+function todoVisible (visible) {
+    visibleTodo = visible; 
+    switch (visible) {
+        case 'all':
+            buttonAllVisible.classList.add('buttonVisible');
+            buttonActiveVisible.classList.remove('buttonVisible');
+            buttonCompleted.classList.remove('buttonVisible');
+
+            allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+            allTodoDocument.forEach(function(value){
+                value.classList.remove('notVisible');
+            })
+            break;
+        case 'active':
+            buttonAllVisible.classList.remove('buttonVisible');
+            buttonActiveVisible.classList.add('buttonVisible');
+            buttonCompleted.classList.remove('buttonVisible');
+
+            allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+            allTodoDocument.forEach(function(value){
+                if(value.classList.contains('active')){
+                    value.classList.remove('notVisible');
+                }else if(value.classList.contains('completed')){
+                    value.classList.add('notVisible');
+                }
+            })
+            break;
+        case 'completed':
+            buttonAllVisible.classList.remove('buttonVisible');
+            buttonActiveVisible.classList.remove('buttonVisible');
+            buttonCompleted.classList.add('buttonVisible');
+
+            allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+            allTodoDocument.forEach(function(value){
+                if(value.classList.contains('active')){
+                    value.classList.add('notVisible');
+                }else if(value.classList.contains('completed')){
+                    value.classList.remove('notVisible');
+                }
+            })
+            break;
+        default:
+            break;
+    }
 }

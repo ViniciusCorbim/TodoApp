@@ -9,11 +9,11 @@
   <link id="modeCSS" rel="stylesheet" href="styles/lightMode.css">
   <link rel="stylesheet" href="styles/newStyle.css">
 </head>
-<body>
+<body onload="loadBody ()">
   <main>
     <div class="title">
       <h1>Todo</h1>
-      <button id="buttonMode"><img src="images/icon-moon.svg" id="iconMode" alt="Icon-Sun"></button>
+      <button id="buttonMode"><img src="images/icon-moon.svg" id="iconMode" alt="Icon-moon"></button>
     </div>
 
     <section>
@@ -23,37 +23,7 @@
       </div>
 
       <div id="containerTodoListAndMenu">
-        <div id="containerTodoList">
-          <div class="divTodoItem completed" id="item1">
-            <div class="circle todoItem completed"></div>
-            <p class="todoItem">Jog around the park 3x</p>
-            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross" draggable="false">
-          </div>
-
-          <div class="divTodoItem active" id="item2">
-            <div class="circle todoItem active"></div>
-            <p class="todoItem">10 minutes meditation</p>
-            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross">
-          </div>
-
-          <div class="divTodoItem active" id="item3">
-            <div class="circle todoItem active"></div>
-            <p class="todoItem">Read for 1 hour</p>
-            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross">
-          </div>
-
-          <div class="divTodoItem active" id="item4">
-            <div class="circle todoItem active"></div>
-            <p class="todoItem">Pick up groceries</p>
-            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross">
-          </div>
-          
-          <div class="divTodoItem active" id="item5">
-            <div class="circle todoItem active"></div>
-            <p class="todoItem">Complete Todo App on Frontend Mentor</p>
-            <img src="images/icon-cross.svg" alt="icon-cross" class="iconCross">
-          </div>
-        </div>
+        <div id="containerTodoList"></div>
 
         <div class="menu">
           <p id="PNumberItensLeft"><span id="numberItensLeft">4</span> items left</p>

@@ -50,6 +50,24 @@ function changeMode () {
 let allTodo = [];
 //-----------------------------Criar um Novo Todo-----------------------------//
 const inputNewTodo = document.getElementById('newTodo');
+const divCircleCreate = document.getElementById('divCircleCreate');
+let situationCreate = 'active';
+
+//Define o estado que o Todo deve ser criado, "active" ou "completed".
+divCircleCreate.addEventListener('click', function (e) {
+    //situationCreateCompleted
+    if (divCircleCreate.classList.contains('situationCreateCompleted')) {
+        divCircleCreate.classList.remove('situationCreateCompleted');
+        inputNewTodo.classList.remove('situationCreateCompleted');
+        situationCreate = 'active';
+    }else{
+        divCircleCreate.classList.add('situationCreateCompleted');
+        inputNewTodo.classList.add('situationCreateCompleted');
+        situationCreate = 'completed';
+    }
+});
+
+
 const divContainerTodos = document.getElementById('containerTodoList');
 //O evento keypress é acionado sempre que uma tecla for pressionada.
 inputNewTodo.addEventListener('keypress', createNewTodo);
@@ -63,7 +81,7 @@ function createNewTodo (e) {
     }
     
     //Cria o objeto do Todo e o armazena na variável que contém todos os objetos.
-    allTodo.push(new Todo(inputNewTodo.value));
+    allTodo.push(new Todo(inputNewTodo.value, situationCreate));
 
     //Cria todos os elementos presentes em uma Div Todo.
     const divTodo = document.createElement('div');
@@ -73,7 +91,7 @@ function createNewTodo (e) {
 
     //Seta os Atributos e Funções da Div container.
     divTodo.classList.add('divTodoItem');
-    divTodo.classList.add('active');
+    divTodo.classList.add(situationCreate);
     divTodo.setAttribute('id', allTodo[allTodo.length - 1].id);
     divTodo.addEventListener("mouseover", iconCross);
     divTodo.addEventListener("mouseout", iconCross);
@@ -113,9 +131,9 @@ function createNewTodo (e) {
 }
 //{text: "Todo" ,situation: "completed",id: "item1"}
 class Todo{
-    constructor(text){
+    constructor(text, situation){
         this.text = text;
-        this.situation = "active";
+        this.situation = situation;
         this.id = "item"+(allTodoDocument.length + 1);
     }
 }

@@ -29,6 +29,31 @@ div.title{
 h1{
     letter-spacing: 0.6em;
 }
+h1 {
+    position: relative;
+    color: #fff;
+    text-decoration: none;  
+  }
+  
+  h1:before {
+    content: "";
+    position: absolute;
+    width: 90%;
+    height: 5px;
+    bottom: -5px;
+    left: 0;
+    background-color: #fff;
+    visibility: hidden;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.5s ease-in-out 0s;
+  }
+  h1:hover:before {
+    visibility: visible;
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
 button{
     background-color: transparent;
     border: none;
@@ -36,17 +61,32 @@ button{
     cursor: pointer;
 }
 img#iconMode.animationMode{
-    animation-name: IConMode;
+    animation-name: changeMode;
     animation-duration: 350ms;
     animation-direction: alternate;
     animation-iteration-count: 2;
 }
-@keyframes IConMode{
+@keyframes changeMode{
     from{
         transform: scale(1);
     }
     to{
         transform: scale(0);
+    }
+}
+#fhief{
+    width: 26px;
+    height: 26px;
+}
+#fhief:hover{
+    animation: rotate 2s linear infinite;
+}
+@keyframes rotate{
+    from{
+        transform: rotate(0);
+    }
+    to{
+        transform: rotate(360deg);
     }
 }
 
@@ -83,6 +123,19 @@ div.circle{
     border: 2px solid var(--color3);
     transition: none;
 }
+div#divCircleCreate:hover{
+    cursor: pointer;
+    background: linear-gradient(var(--color1), var(--color1)) padding-box, linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 2px;
+}
+div#divCircleCreate.situationCreateCompleted{
+    background-image: url(../images/icon-check.svg), linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: none !important;
+}
 input#newTodo{
     background-color: transparent;
     font-size: 20px;
@@ -95,6 +148,13 @@ input#newTodo::placeholder{
     font-size: 20px;
     color: var(--color5);
     opacity: 0.7;
+}
+input#newTodo.situationCreateCompleted::placeholder, input#newTodo.situationCreateCompleted{
+    text-decoration: line-through;
+}
+input#newTodo:hover::placeholder, input#newTodo:focus::placeholder{
+    color: var(--color2);
+    opacity: 0.8;
 }
 
 
@@ -115,11 +175,11 @@ div.divTodoItem.completed > p.todoItem {
     text-decoration: line-through;
     text-shadow: 0px 0px 0px rgb(0 0 0 / 66%);
 }
-div.divTodoItem.completed > p.todoItem:hover {
+div.divTodoItem.completed > p.todoItem:hover, div.divTodoItem.completed >div.circle:hover ~ p.todoItem{
     color: var(--color5);
     text-decoration: underline;
 }
-div.divTodoItem.active > p.todoItem:hover {
+div.divTodoItem.active > p.todoItem:hover, div.divTodoItem.active >div.circle:hover ~ p.todoItem{
     color: var(--color3);
     text-decoration: line-through;
 }

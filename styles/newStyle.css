@@ -258,3 +258,160 @@ p.psoe {
 .attribution a {
     color: var(--primaryColor1);
 }
+
+
+
+
+@media(hover: none){
+    *{
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    img.iconCross{
+        display: block;
+        opacity: 0.7;
+    }
+
+    div.circle:hover{
+        border: 2px solid var(--color3) !important;
+    }
+    div.divTodoItem.active > div.circle.todoItem:hover {
+        background: transparent !important;
+    }
+    div#divCircleCreate:hover{
+        background: transparent;
+    }
+    div#divCircleCreate.situationCreateCompleted:hover{
+        background-image: url(../images/icon-check.svg), linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+        background-repeat: no-repeat;
+        background-position: center center;
+        border: none !important;
+    }
+
+
+    
+    div.divTodoItem.completed > p.todoItem:hover, div.divTodoItem.completed >div.circle:hover ~ p.todoItem{
+        color: var(--color3);
+        text-decoration: line-through;
+    }
+    div.divTodoItem.active > p.todoItem:hover, div.divTodoItem.active >div.circle:hover ~ p.todoItem{
+        color: var(--color5);
+        text-decoration: none;
+    }
+
+    div.divTodoItem.active > div.circle.todoItem:hover {
+        background: linear-gradient(var(--color1), var(--color1)) padding-box, linear-gradient(120deg,hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 2px;
+    }
+
+
+    div.menu button:hover{
+        color: var(--color4);
+    }
+
+
+    #fhief{
+        width: 26px;
+        height: 26px;
+        animation: rotate 4s linear infinite;
+    }
+    #fhief:hover{
+        animation: rotate 4s linear infinite;
+    }
+    @keyframes rotate{
+        from{
+            transform: rotate(0);
+        }
+        to{
+            transform: rotate(360deg);
+        }
+    }
+}
+
+
+@media(max-width: 600px) {
+    /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+    body{
+        font-size: 16px;
+    }
+    main{
+        width: 80vw;
+    }
+    img.iconCross{
+        display: block;
+        opacity: 0.7;
+        left: 92%;
+    }
+    div.menu{
+        position: relative;
+        font-size: 15px;
+    }
+    div.buttonsDisplayTodo{
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        position: absolute;
+        top: 140%;
+        width: 80vw;
+        padding: 14px 0 14px;
+        border-radius: 7px;
+        
+        background-color: var(--color1);
+        box-shadow: var(--boxShadow);
+    }
+    p.psoe {
+        margin: 120px 0 50px;
+        text-align: center;
+    }
+}
+
+
+@media (max-width: 500px){
+    main{
+        width: 90vw;
+    }
+}
+
+
+@media(max-width: 375px){
+    main{
+        margin: 50px auto 0;
+        width: 88vw;
+    }
+    h1{
+        font-size: 35px;
+    }
+
+    div.buttonsDisplayTodo{
+        padding: 14px 3px 14px;
+    }
+
+    div.title { margin-bottom: 20px; }
+    div.createTodo { margin-bottom: 18px; }
+}
+
+
+@media(max-width: 345px){
+    main{
+        width: 94vw;
+    }
+}
+@media(max-width: 300px){
+    div.buttonsDisplayTodo{
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    img.iconCross{
+        left: 90%;
+    }
+    p.todoItem{
+        overflow: visible;
+    }
+}

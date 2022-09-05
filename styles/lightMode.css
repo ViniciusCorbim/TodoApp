@@ -38,3 +38,17 @@
     --colorLight5: hsl(235, 19%, 35%);
     */
 }
+
+
+@media(max-width: 600px){
+    :root{
+        --boxShadow: 0px 35px 31px 10px hsl(0deg 0% 0% / 10%);
+    }
+}
+
+
+@media(max-width: 375px){
+    :root{
+        --imageURL: url(../images/bg-mobile-light.jpg);
+    }
+}

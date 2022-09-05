@@ -378,6 +378,6 @@ function loadMode () {
         mode = 'light';
         setTimeout(function() {
                 changeMode();
-        }, 200);
+        }, 400);
     }
 }

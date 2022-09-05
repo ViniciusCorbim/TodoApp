@@ -2,10 +2,6 @@
     --imageURL: url('../images/bg-desktop-light.jpg');
     --boxShadow: 0px 35px 31px 10px hsl(0deg 0% 0% / 7%), 0px 7px 11px 2px rgb(0 0 0 / 5%);
 
-    /*-----Primary-Colors-----
-    --primaryColor1: hsl(220, 98%, 61%); /*Bright Blue
-    --backgroundColor: linear-gradient(hsl(192, 100%, 67%) to hsl(280, 87%, 65%));*/
-
     --colorBackground: hsl(236, 33%, 92%);
     --primaryColor1: hsl(220, 98%, 61%);
     --color1: hsl(0, 0%, 98%);
@@ -14,29 +10,6 @@
     --color4: hsl(233, 11%, 52%);
     --color5: hsl(235, 19%, 35%);
     --color6: hsl(233, 14%, 35%);
-
-    /*
-    --color2: hsl(235, 24%, 19%);
-    --color3: hsl(234, 39%, 85%);
-    --color4: hsl(236, 33%, 92%);
-    --color5: hsl(236, 33%, 92%);
-
-    --fontOne: 'Josefin Sans', sans-serif;
-    --primaryColor1: hsl(220, 98%, 61%);
-    --backgroundColor: linear-gradient(hsl(192, 100%, 67%) to hsl(280, 87%, 65%));
-    --colorDark1: hsl(235, 21%, 11%);
-    --colorDark2: hsl(235, 24%, 19%);
-    --colorDark3: hsl(234, 39%, 85%);
-    --colorDark4: hsl(236, 33%, 92%);
-    --colorDark5: hsl(234, 11%, 52%);
-    --colorDark6: hsl(233, 14%, 35%);
-    --colorDark7: hsl(237, 14%, 26%);
-    --colorLight1: hsl(0, 0%, 98%);
-    --colorLight2: hsl(236, 33%, 92%);
-    --colorLight3: hsl(220, 3%, 77%);
-    --colorLight4: hsl(236, 9%, 61%);
-    --colorLight5: hsl(235, 19%, 35%);
-    */
 }
 
 

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortable</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 100vw;
+            min-height: 100vh;
+            background-color: aliceblue;
+        }
+        ul li{
+            width: 200px;
+            padding: 4px;
+            padding-left: 10px;
+            background-color: blanchedalmond;
+            border-radius: 7px;
+            margin-bottom: 15px;
+            list-style: none;
+        }
+        ul li.hint{
+            background-color: aqua;
+        }
+        ul li.active{
+            background-color: brown;
+        }
+    </style>
+</head>
+<body>
+    <ul id="sortList">
+        <li draggable="true">Item 1</li>
+        <li draggable="true">Item 2</li>
+        <li draggable="true">Item 3</li>
+        <li draggable="true">Item 4</li>
+        <li draggable="true">Item 5</li>
+    </ul>
+
+    <script>
+        window.addEventListener('load', function (e) {
+            let items = document.querySelectorAll('#sortList li');
+            let dragged = null;
+
+            for(let i of items){
+                i.addEventListener('dragstart', function () {
+                    dragged = this;
+
+                    for(let j of items){
+                        if(dragged != j){
+                            j.classList.add('hint')
+                        }
+                    }
+                });
+                i.addEventListener('dragenter', function () {
+                    if(this != dragged){
+                        this.classList.add('active')
+                    }
+                });
+                i.addEventListener('dragleave', function () {
+                    this.classList.remove('active')
+                });
+                i.addEventListener('dragend', function () {
+                    for (const k of items) {
+                        k.classList.remove('active');
+                        k.classList.remove('hint');
+                    }
+                    
+                });
+                i.addEventListener('dragover', function (e) {
+                    e.preventDefault();
+                });
+                i.addEventListener('drop', function (e) {
+                    if(this != dragged){
+                        let all= document.querySelectorAll('ul#sortList li');
+                        let draggedPos = 0; let droppedPos = 0;
+
+                        for (let it = 0; it < all.length; it++) {
+                            if(dragged == all[it]){
+                                draggedPos = it;
+                            }
+                            if(this == all[it]){
+                                droppedPos = it;
+                            }
+
+                            if(draggedPos < droppedPos){
+                                this.parentNode.insertBefore(dragged, this.nextSibling);
+                            }else{
+                                this.parentNode.insertBefore(dragged, this);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -81,7 +81,7 @@ function createNewTodo (e) {
     }
     
     //Cria o objeto do Todo e o armazena na variável que contém todos os objetos.
-    allTodo.push(new Todo(inputNewTodo.value, situationCreate));
+    allTodo.push(new Todo(inputNewTodo.value, situationCreate, "item"+(allTodoDocument.length + 1)));
 
     //Cria todos os elementos presentes em uma Div Todo.
     const divTodo = document.createElement('div');
@@ -93,6 +93,7 @@ function createNewTodo (e) {
     divTodo.classList.add('divTodoItem');
     divTodo.classList.add(situationCreate);
     divTodo.setAttribute('id', allTodo[allTodo.length - 1].id);
+    divTodo.setAttribute('draggable', 'true');
     divTodo.addEventListener("mouseover", iconCross);
     divTodo.addEventListener("mouseout", iconCross);
 
@@ -128,13 +129,14 @@ function createNewTodo (e) {
     setItem(allTodo);//Salva a nova todoList no localStorage.
     todoVisible (visibleTodo);//Vai para a função que define quais Todo estarão visiveis.
     displayTodoActive ();//Atualiza a quantidade de itens ativos.
+    Sortable()
 }
 //{text: "Todo" ,situation: "completed",id: "item1"}
 class Todo{
-    constructor(text, situation){
+    constructor(text, situation, id){
         this.text = text;
         this.situation = situation;
-        this.id = "item"+(allTodoDocument.length + 1);
+        this.id = id;
     }
 }
 
@@ -310,6 +312,7 @@ function loadBody () {
     loadTodoList ();//Carrega a todoList na página.
     todoVisible ("all");//Define que todos os todo são visiveis.
     displayTodoActive ();//Atualiza a quantidade de itens ativos.
+    Sortable()
 }
 
 function loadTodoList () {
@@ -335,6 +338,7 @@ function loadTodoList () {
         //Seta os Atributos e Funções da Div container.
         divTodo.classList.add('divTodoItem');
         divTodo.classList.add(value.situation);
+        divTodo.setAttribute('draggable', 'true');
         divTodo.setAttribute('id', value.id);
         divTodo.addEventListener("mouseover", iconCross);
         divTodo.addEventListener("mouseout", iconCross);
@@ -374,10 +378,73 @@ function loadMode () {
         linkCSS.href = "styles/lightMode.css";
         imgButton.src = "images/icon-moon.svg";
     }else if(localStorage.getItem('mode') == 'dark'){
+        mode = 'dark';
+        linkCSS.href = "styles/darkMode.css";
+        imgButton.src = "images/icon-sun.svg";
+        /*
         //Aguarda carregar o modo claro e depois vai para o escuro.
         mode = 'light';
         setTimeout(function() {
                 changeMode();
-        }, 400);
+        }, 400);*/
     }
+}
+
+
+
+let dragged = null;
+function Sortable() {
+    allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+
+    for(let i of allTodoDocument){
+        i.addEventListener('dragstart', dragStart);
+        i.addEventListener('dragenter', dragEnter);
+        i.addEventListener('dragover', dragEnd);
+    }
+}
+
+
+function dragStart() {
+    dragged = this;
+}
+function dragEnter() {      
+    if(this != dragged){
+        allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+        let draggedPos = 0; let droppedPos = 0;
+
+        for (let it = 0; it < allTodoDocument.length; it++) {
+            if(dragged == allTodoDocument[it]){
+                draggedPos = it;
+            }
+            if(this == allTodoDocument[it]){
+                droppedPos = it;
+            }
+
+            if(draggedPos < droppedPos){
+                this.parentNode.insertBefore(dragged, this.nextSibling);
+            }else{
+                this.parentNode.insertBefore(dragged, this);
+            }
+        }
+    }
+}
+function dragEnd(e) {
+    e.preventDefault();
+    setTimeout(function() {
+        reorderVarTodoList();
+    }, 200);
+}
+
+function reorderVarTodoList () {
+    allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+    allTodo = [];
+    let al = 0;
+    for (let i of allTodoDocument) {
+        al++;
+        let text = i.innerText;
+        let situation = i.classList.contains('active')?'active':'completed';
+        allTodo.push(new Todo(text, situation, 'item'+al));
+    }
+    setItem([]);//Limpa a todoList no localStorage.
+    setItem(allTodo);//Salva a nova todoList no localStorage.
 }

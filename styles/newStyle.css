@@ -375,7 +375,7 @@ p.psoe {
 
 @media (max-width: 500px){
     main{
-        width: 90vw;
+        width: 80vw;
     }
 }
 
@@ -383,7 +383,6 @@ p.psoe {
 @media(max-width: 375px){
     main{
         margin: 50px auto 0;
-        width: 88vw;
     }
     h1{
         font-size: 35px;
@@ -398,11 +397,6 @@ p.psoe {
 }
 
 
-@media(max-width: 345px){
-    main{
-        width: 94vw;
-    }
-}
 @media(max-width: 300px){
     div.buttonsDisplayTodo{
         flex-wrap: wrap;

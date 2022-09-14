@@ -391,7 +391,7 @@ function loadMode () {
 }
 
 
-
+//Drag and Drop to Reorder
 let dragged = null;
 function Sortable() {
     allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
@@ -400,17 +400,21 @@ function Sortable() {
         i.addEventListener('dragstart', dragStart);
         i.addEventListener('dragenter', dragEnter);
         i.addEventListener('dragover', dragEnd);
+
+        i.addEventListener('touchstart', touchStart);
+        i.addEventListener('touchend', touchEnd);
     }
 }
 
 
+//Drag and Drop to Reorder List in Computer
 function dragStart() {
     dragged = this;
 }
 function dragEnter() {      
     if(this != dragged){
         allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
-        let draggedPos = 0; let droppedPos = 0;
+        let draggedPos = 0; let droppedPos = 0;//Posição do item dragged e posição do item dropped
 
         for (let it = 0; it < allTodoDocument.length; it++) {
             if(dragged == allTodoDocument[it]){
@@ -421,9 +425,11 @@ function dragEnter() {
             }
 
             if(draggedPos < droppedPos){
-                this.parentNode.insertBefore(dragged, this.nextSibling);
+                //Se o item dragged estiver atrás do item dropped.
+                this.parentNode.insertBefore(dragged, this.nextSibling);//Coloca o item dragged depois do item dropped
             }else{
-                this.parentNode.insertBefore(dragged, this);
+                //Se o item pego estiver na dragged do item dropped.
+                this.parentNode.insertBefore(dragged, this);//Coloca o item dragged antes do item dropped
             }
         }
     }
@@ -435,6 +441,91 @@ function dragEnd(e) {
     }, 200);
 }
 
+
+
+
+
+//Drag and Drop to Reorder List in Phone.
+//Declaraçãos das Variáveis usadas nas próximas três funções.
+let ThisMinY;//posição Y do começo do todo.
+let ThisMaxY;//posição Y do final do todo.
+let y;//Posição Y de onde o toque ocorreu
+let currentY;//Posição Y atual durante um touchmove
+function touchStart(e){
+    //Quando ocorre um toque em um todo.
+    document.body.style.overflow = 'hidden';
+
+    y = e.touches[0].clientY;//pega a posição de onde ocorreu o toque.
+    ThisMinY = this.getBoundingClientRect().y;
+    ThisMaxY = this.getBoundingClientRect().y + this.getBoundingClientRect().height;
+
+    this.addEventListener('touchmove', touchMove);
+}
+
+function touchMove (e){
+    currentY = e.changedTouches[0].clientY;//Atualiza o currentY
+
+    //Se a direção do touchmove for para cima no primeiro todo (não tem nenhum todo acima então não terá como reordenar)
+    //ou a direção for para baixo no ultimo todo (não tem nenhum todo abaixo então não terá como reordenar)
+    if ((currentY<ThisMinY && this === allTodoDocument[0]) || (currentY>ThisMaxY && this === allTodoDocument[allTodoDocument.length-1])){
+        return;//Cancela a função
+    }
+
+    //Troca a posição do todo com o todo abaixo dele.
+    if((currentY>ThisMaxY)){
+        //Armazena o valor do todo abaixo do atual.
+        let numberItem = parseInt(this.id.substr(4));
+        let nextChild = document.getElementById('item'+(numberItem+1));
+
+        //Troca a posição.
+        this.parentNode.insertBefore(nextChild, this);
+
+        //Troca os Ids.
+        let id = this.id;
+        this.id = nextChild.id;
+        nextChild.id = id;
+
+        //Atualiza variáveis.
+        ThisMinY = this.getBoundingClientRect().y;
+        ThisMaxY = this.getBoundingClientRect().y + this.getBoundingClientRect().height;
+        currentY = e.changedTouches[0].clientY;
+        allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+    }
+
+    //Troca a posição do todo com o todo acima dele.
+    if((currentY<ThisMinY)){
+        //Armazena o valor do todo acima do atual.
+        let numberItem = parseInt(this.id.substr(4));
+        let previousChild = document.getElementById('item'+(numberItem-1));
+        this.parentNode.insertBefore(previousChild, this.nextSibling);
+
+        //Troca os Ids.
+        let id = this.id;
+        this.id = previousChild.id;
+        previousChild.id = id;
+
+        //Atualiza variáveis.
+        ThisMinY = this.getBoundingClientRect().y;
+        ThisMaxY = this.getBoundingClientRect().y + this.getBoundingClientRect().height;
+        currentY = e.changedTouches[0].clientY;
+        allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+    }
+}
+function touchEnd(e){
+    setTimeout(function() {
+        document.body.style.overflow = null;
+    }, 100);
+
+    setTimeout(function() {
+        reorderVarTodoList();
+    }, 200);
+
+    this.removeEventListener('touchmove', touchMove);
+}
+
+
+
+//Atualiza as variáveis relacionadas aos todo quando a lista é reordenada.
 function reorderVarTodoList () {
     allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
     allTodo = [];
@@ -444,6 +535,7 @@ function reorderVarTodoList () {
         let text = i.innerText;
         let situation = i.classList.contains('active')?'active':'completed';
         allTodo.push(new Todo(text, situation, 'item'+al));
+        i.id = 'item'+al;
     }
     setItem([]);//Limpa a todoList no localStorage.
     setItem(allTodo);//Salva a nova todoList no localStorage.

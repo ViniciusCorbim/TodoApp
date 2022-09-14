@@ -1,46 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- displays site properly based on user's device -->
-
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-
   <title>Frontend Mentor | Todo app</title>
+  <link id="modeCSS" rel="stylesheet" href="styles/lightMode.css">
   <link rel="stylesheet" href="styles/style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"
-    integrity="sha512-zYXldzJsDrNKV+odAwFYiDXV2Cy37cwizT+NkuiPGsa9X1dOz04eHvUWVuxaJ299GvcJT31ug2zO4itXBjFx4w=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
-
 <body onload="loadBody ()">
   <main>
-    <div class="containerBackgroundImage">
-      <div class="title">
-        <h1>Todo</h1>
-        <img src="images/icon-sun.svg" alt="Icon-Sun" id="IconMode">
-      </div>
+    <div class="title">
+      <h1>Todo</h1>
+      <div id="fhief"><button id="buttonMode"><img src="images/icon-moon.svg" id="iconMode" alt="Icon-moon"></button></div>
     </div>
 
-    <section id="containerB">
+    <section>
       <div class="createTodo">
-        <div class="circle"></div>
+        <div class="circle" id="divCircleCreate"></div>
         <input type="text" placeholder="Create a new todo..." id="newTodo">
       </div>
 
-      <div id="container">
-        <div id="containerTodo">
-        </div>
-        <div class="t3fs">
-          <p id="PNumberItensLeft"><span id="numberItensLeft"></span> items left</p>
-          <div class="menu">
-            <span id="spanAll">All</span>
-            <span id="spanActive">Active</span>
-            <span id="spanCompleted">Completed</span>
+      <div id="containerTodoListAndMenu">
+        <div id="containerTodoList"></div>
+
+        <div class="menu">
+          <p id="PNumberItensLeft"><span id="numberItensLeft">4</span> items left</p>
+          <div class="buttonsDisplayTodo">
+            <button id="buttonAll">All</button>
+            <button id="buttonActive">Active</button>
+            <button id="buttonCompleted">Completed</button>
           </div>
-          <p id="clearComplete">Clear Completed</p>
+          <button id="buttonClearComplete">Clear Completed</button>
         </div>
       </div>
     </section>
@@ -53,13 +45,5 @@
     </div>
   </main>
   <script src="scripts/script.js"></script>
-  <script>
-    const dragArea = document.querySelector('div#containerTodo');
-    new Sortable(dragArea, {
-      animation: 350,
-      handle: '.DivTodoItem'
-    });
-  </script>
 </body>
-
 </html>

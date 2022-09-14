@@ -1,614 +1,542 @@
-//Armazena a imagem IconMode em uma variável
-// esta imagem se comporta como um botão devido ao evento click/touchscreen
-let mode = document.getElementById('IconMode');
-let inputNewTodo = document.getElementById('newTodo');//Pega o Input NewTodo
-const DivContainerTodos = document.getElementById('containerTodo');//Pega a div que armazena os Todo
+//-----------------------Mudança de Modo Dark || Light-----------------------//
+const changeModeButton = document.getElementById('buttonMode');
+changeModeButton.addEventListener("click", changeMode);
+let mode = "light"; //Define o modo claro como o padrão.
 
-let spanAll = document.getElementById('spanAll');
-let spanActive = document.getElementById('spanActive');
-let spanCompleted = document.getElementById('spanCompleted');
-let clearComplete = document.getElementById('clearComplete');
-let visible = 0;
-let modeVar = false;  // true - Dark Mode   e   false - Light Mode
-let CacheDoNavegadorLimpo;
+//Função que alterna os modos Claro e Escuro.
+function changeMode () {
+    //O estilo da página é feito atráves de variáveis do CSS.
+    //Há dois arquivos diferentes que carregam variáveis com o mesmo nome,
+    // porém com valores diferentes (cores e imagens).
+    //O link "linkCSS" é responsável por carregar um desses arquivos.
+    const imgButton = document.getElementById('iconMode');//Ícone do botão de alternar modo.
+    const linkCSS = document.getElementById('modeCSS');//link do arquivo CSS com as variáveis.
 
-clearComplete.addEventListener('touchstart', touchStart);
-clearComplete.addEventListener('touchend', touchEnd);
-function touchStart() {
-      clearComplete.classList.add('touch');
-}
-function touchEnd() {
-      clearComplete.classList.remove('touch');
-}
+    mode = mode=="light"?"dark":"light";//Inverte o modo.
+    if (mode=="light") {
+        //Carrega o arquivo do Modo Claro.
+        linkCSS.href = "styles/lightMode.css";
 
-function hasTouch() {
-    return 'ontouchstart' in document.documentElement
-           || navigator.maxTouchPoints > 0
-           || navigator.msMaxTouchPoints > 0;
-  }
+        //Inicia uma animação para trocar o Ícone do botão.
+        //A função não pode ser chamada durante a animação.
+        imgButton.classList.add('animationMode');
+        changeModeButton.removeEventListener("click", changeMode);
+        setTimeout(function() {
+            imgButton.src = "images/icon-moon.svg";
+        }, 350);
+    } else if(mode=="dark"){
+        //Carrega o arquivo do Modo Claro.
+        linkCSS.href = "styles/darkMode.css";
 
-let ToDos = [
-    {text: 'Jog around the park 3x', active: false, id: 'item0'},
-    {text: '10 minutes meditation', active: true, id: 'item1'},
-    {text: 'Read for 1 hour', active: true, id: 'item2'},
-    {text: 'Pick up groceries', active: true, id: 'item3'},
-    {text: 'Complete Todo App on Frontend Mentor', active: true, id: 'item4'}
-]
-//localStorage.setItem('todoList', JSON.stringify(ToDos));
-
-function loadBody () {
-    CacheDoNavegadorLimpo = localStorage.getItem('CacheClear');
-    if(CacheDoNavegadorLimpo == 'false' && getItem() != []){
-        ToDos = getItem();
-    }else{
-        ToDos = [
-            {text: 'Jog around the park 3x', active: false, id: 'item0'},
-            {text: '10 minutes meditation', active: true, id: 'item1'},
-            {text: 'Read for 1 hour', active: true, id: 'item2'},
-            {text: 'Pick up groceries', active: true, id: 'item3'},
-            {text: 'Complete Todo App on Frontend Mentor', active: true, id: 'item4'}
-        ]
-        localStorage.setItem('todoList', JSON.stringify(ToDos));
+        //Inicia uma animação para trocar o Ícone do botão.
+        //A função não pode ser chamada durante a animação.
+        imgButton.classList.add('animationMode');
+        changeModeButton.removeEventListener("click", changeMode);
+        setTimeout(function() {
+            imgButton.src = "images/icon-sun.svg";
+        }, 350);
     }
+    localStorage.setItem('mode', mode);//Salva o modo no localStorage.
 
-    for(let i=0; i<ToDos.length; i++){
-        let DivTodo = document.createElement('div');
-        let DivCircle = document.createElement('div');
-        let pTodo = document.createElement('p');
-        let imgIconCross = document.createElement('img');
-
-        imgIconCross.src = 'images/icon-cross.svg';
-        imgIconCross.setAttribute('alt', 'icon-cross');
-        imgIconCross.setAttribute('class', 'iconCross');
-        imgIconCross.addEventListener('click', clearTodo);
-        imgIconCross.addEventListener('touchend', clearTodo);
-
-        DivTodo.setAttribute('class', 'DivTodoItem');
-        DivTodo.addEventListener('mouseover', IconCrossVisible);
-        DivTodo.addEventListener('mouseout', IconCrossNotVisible);
-        DivCircle.setAttribute('class', 'circle TodoItem active');
-        pTodo.setAttribute('class', 'TodoItem');
-
-        pTodo.innerHTML = ToDos[i].text;
-
-        if(ToDos[i].active){
-            DivTodo.classList.add('active');
-            DivTodo.setAttribute('id', ToDos[i].id);
-            if(hasTouch()){
-                DivCircle.addEventListener('touchend', markTodo);
-                pTodo.addEventListener('touchend', markTodo);
-            }else{
-                DivCircle.addEventListener('click', markTodo);
-                pTodo.addEventListener('click', markTodo);
-            }
-        }else{
-            DivTodo.classList.add('completed');
-            DivTodo.setAttribute('id', ToDos[i].id);
-            if(hasTouch()){
-                DivCircle.addEventListener('touchend', markOffTodo);
-                pTodo.addEventListener('touchend', markOffTodo);
-            }else{
-                DivCircle.addEventListener('click', markOffTodo);
-                pTodo.addEventListener('click', markOffTodo);
-            }
-        }
-
-        inputNewTodo.focus();
-
-        DivTodo.appendChild(DivCircle);
-        DivTodo.appendChild(pTodo);
-        DivTodo.appendChild(imgIconCross);
-        DivContainerTodos.appendChild(DivTodo);
-    }
-
-    if(localStorage.getItem('DarkMode') == 'false'){
-        modeVar = false;
-    }else{
-        modeVar = true;
-    }
-
-    ChangeMode();
-    allVisible ();
-    countActivesTodo ();
-}
-
-mode.addEventListener('click', ChangeMode);
-function ChangeMode(){
-    modeVar = !modeVar;
-    mode.classList.add('AnimationA');
-    if(modeVar){
-        DarkMode ();
-        localStorage.setItem('DarkMode', !modeVar);
-    }else{
-        LightMode ();
-        localStorage.setItem('DarkMode', !modeVar);
-    }
-
+    //Finaliza a animação de trocar o Ícone do botão.
+    //A função pode ser chamada novamente.
     setTimeout(function() {
-        mode.classList.remove('AnimationA');
+        imgButton.classList.remove('animationMode');
+        changeModeButton.addEventListener("click", changeMode);
     }, 700);
 }
 
-function DarkMode () {
-    const body = document.getElementsByTagName('body')[0];
-    const container = document.getElementById('container');
-    const divCreateTodo = document.getElementsByClassName('createTodo')[0];
-    let ActivesTodo = document.querySelectorAll('div.DivTodoItem.active');
-    let CompletedTodo = document.querySelectorAll('div.DivTodoItem.completed');
-    let Menu = document.getElementsByClassName('menu')[0];
-    let t3fs = document.getElementsByClassName('t3fs')[0];
-    let attribution = document.getElementsByClassName('attribution')[0];
 
-    body.classList.remove('lightMode');
-    container.classList.remove('lightMode');
-    divCreateTodo.classList.remove('lightMode');
-    inputNewTodo.classList.remove('lightMode');
-    Menu.classList.remove('lightMode');
-    t3fs.classList.remove('lightMode');
-    clearComplete.classList.remove('lightMode');
-    attribution.classList.remove('lightMode');
+let allTodo = [];
+//-----------------------------Criar um Novo Todo-----------------------------//
+const inputNewTodo = document.getElementById('newTodo');
+const divCircleCreate = document.getElementById('divCircleCreate');
+let situationCreate = 'active';
 
-    
-    body.classList.add('darkMode');
-    container.classList.add('darkMode');
-    divCreateTodo.classList.add('darkMode');
-    inputNewTodo.classList.add('darkMode');
-    t3fs.classList.add('darkMode');
-    clearComplete.classList.add('darkMode');
-    
-    for(let i=0; i < ActivesTodo.length; i++){
-        ActivesTodo[i].classList.add("darkMode");
-        ActivesTodo[i].classList.remove("lightMode");
-    }
-    for(let i=0; i < CompletedTodo.length; i++){
-        CompletedTodo[i].classList.add("darkMode");
-        CompletedTodo[i].classList.remove("lightMode")
-    }
-
-    setTimeout(function() {
-        mode.src = 'images/icon-sun.svg';
-    }, 350);
-}
-function LightMode () {
-    const body = document.getElementsByTagName('body')[0];
-    const container = document.getElementById('container');
-    const divCreateTodo = document.getElementsByClassName('createTodo')[0];
-    let ActivesTodo = document.querySelectorAll('div.DivTodoItem.active');
-    let CompletedTodo = document.querySelectorAll('div.DivTodoItem.completed');
-    let Menu = document.getElementsByClassName('menu')[0];
-    let t3fs = document.getElementsByClassName('t3fs')[0];
-    let attribution = document.getElementsByClassName('attribution')[0];
-
-    body.classList.remove('darkMode');
-    container.classList.remove('darkMode');
-    divCreateTodo.classList.remove('darkMode');
-    inputNewTodo.classList.remove('darkMode');
-    t3fs.classList.remove('darkMode');
-    clearComplete.classList.remove('darkMode');
-
-    
-    body.classList.add('lightMode');
-    container.classList.add('lightMode');
-    divCreateTodo.classList.add('lightMode');
-    inputNewTodo.classList.add('lightMode');
-    Menu.classList.add('lightMode');
-    t3fs.classList.add('lightMode');
-    clearComplete.classList.add('lightMode');
-    attribution.classList.add('lightMode');
-
-    for(let i=0; i < ActivesTodo.length; i++){
-        ActivesTodo[i].classList.add("lightMode");
-        ActivesTodo[i].classList.remove("darkMode");
-    }
-    for(let i=0; i < CompletedTodo.length; i++){
-        CompletedTodo[i].classList.add("lightMode");
-        CompletedTodo[i].classList.remove("darkMode");
-    }
-    setTimeout(function() {
-        mode.src = 'images/icon-moon.svg';
-    }, 350);
-}
-
-inputNewTodo.addEventListener('keypress', function(e){
-    //Verifica se foi a tecla Enter que acionou o evento keypress
-    //se não for a função é encerrada
-    //verifica também se o Input está vazio, e se estiver a função também é encerrada
-    const keycode = e.keyCode;
-    if(keycode != 13 || inputNewTodo.value == ''){
-        return;
-    }
-    //se foi a tecla enter o resto da função é executado
-    let DivTodo = document.createElement('div');
-    let DivCircle = document.createElement('div');
-    let pTodo = document.createElement('p');
-    let imgIconCross = document.createElement('img');
-
-    imgIconCross.src = 'images/icon-cross.svg';
-    imgIconCross.setAttribute('alt', 'icon-cross');
-    imgIconCross.setAttribute('class', 'iconCross');
-    imgIconCross.addEventListener('click', clearTodo);
-    imgIconCross.addEventListener('touchend', clearTodo);
-
-    DivTodo.setAttribute('class', 'DivTodoItem active');
-    DivTodo.id = 'item'+ToDos.length;
-    DivTodo.addEventListener('mouseover', IconCrossVisible);
-    DivTodo.addEventListener('mouseout', IconCrossNotVisible);
-    DivCircle.setAttribute('class', 'circle TodoItem active');
-
-    if(hasTouch()){
-        DivCircle.addEventListener('touchend', markTodo);
-        pTodo.addEventListener('touchend', markTodo);
+//Define o estado que o Todo deve ser criado, "active" ou "completed".
+divCircleCreate.addEventListener('click', function (e) {
+    //situationCreateCompleted
+    if (divCircleCreate.classList.contains('situationCreateCompleted')) {
+        divCircleCreate.classList.remove('situationCreateCompleted');
+        inputNewTodo.classList.remove('situationCreateCompleted');
+        situationCreate = 'active';
     }else{
-        DivCircle.addEventListener('click', markTodo);
-        pTodo.addEventListener('click', markTodo);
+        divCircleCreate.classList.add('situationCreateCompleted');
+        inputNewTodo.classList.add('situationCreateCompleted');
+        situationCreate = 'completed';
     }
-
-    pTodo.setAttribute('class', 'TodoItem');
-    pTodo.innerHTML = inputNewTodo.value;
-
-    let pTodoDocument = document.querySelectorAll('p.TodoItem');
-    for(let i = 0; i < document.querySelectorAll('p.TodoItem').length; i++){
-        if(pTodo.innerHTML == pTodoDocument[i].innerHTML){
-            inputNewTodo.value = 'This Todo exists!';
-            return;
-        }
-    }
-
-    DivTodo.appendChild(DivCircle);
-    DivTodo.appendChild(pTodo);
-    DivTodo.appendChild(imgIconCross);
-    DivContainerTodos.appendChild(DivTodo);
-
-    inputNewTodo.value = '';
-    countActivesTodo ();
-
-    if(modeVar){
-        DarkMode ()
-    }else{
-        LightMode ();
-    }
-
-    switch(visible){
-        case 0: allVisible ();
-            break;
-        case 1: activeVisible ();
-            break;
-        case 2: completedVisible ();
-            break;
-    }
-
-    PushToDo (pTodo.innerText, true);
-    localStorage.setItem('CacheClear', false);
 });
 
-function markTodo() {
-    if(x === 1){
-        x = 0;
-        return;
+
+const divContainerTodos = document.getElementById('containerTodoList');
+//O evento keypress é acionado sempre que uma tecla for pressionada.
+inputNewTodo.addEventListener('keypress', createNewTodo);
+
+//Função que cria um novo todo.
+function createNewTodo (e) {
+    //A função apenas continuará se foi a tecla Enter que acionou a função e o Input não estiver vázio.
+    const keycode = e.keyCode;
+    if(keycode != 13 || inputNewTodo.value == ''){
+        return
     }
-    let children = this.parentNode.children;
-    this.parentNode.classList.remove('active');
-    this.parentNode.classList.add('completed');
+    
+    //Cria o objeto do Todo e o armazena na variável que contém todos os objetos.
+    allTodo.push(new Todo(inputNewTodo.value, situationCreate, "item"+(allTodoDocument.length + 1)));
 
-    for(let i=0; i<ToDos.length ; i++){
-        if(ToDos[i].id == this.parentNode.id){
-            ToDos[i].active = false;
-            setItem ();
-        }
+    //Cria todos os elementos presentes em uma Div Todo.
+    const divTodo = document.createElement('div');
+    const divCircle = document.createElement('div');
+    const pTodo = document.createElement('p');
+    const imgIconCross = document.createElement('img');
+
+    //Seta os Atributos e Funções da Div container.
+    divTodo.classList.add('divTodoItem');
+    divTodo.classList.add(situationCreate);
+    divTodo.setAttribute('id', allTodo[allTodo.length - 1].id);
+    divTodo.setAttribute('draggable', 'true');
+    divTodo.addEventListener("mouseover", iconCross);
+    divTodo.addEventListener("mouseout", iconCross);
+
+    //Seta os Atributos da Div Circle.
+    divCircle.classList.add('circle');
+    divCircle.classList.add('todoItem');
+    divCircle.addEventListener('click', markTodo);
+
+    //Seta os Atributos do Paragrafo da Div Todo.
+    pTodo.classList.add('todoItem')
+    pTodo.addEventListener('click', markTodo);
+    pTodo.innerHTML = inputNewTodo.value;
+
+    //Seta os Atributos da Imagem Cross.
+    imgIconCross.src = 'images/icon-cross.svg';
+    imgIconCross.setAttribute('alt', 'icon-cross');
+    imgIconCross.classList.add('iconCross');
+    imgIconCross.addEventListener('click', deleteTodo);
+
+
+    //Coloca todos os elementos do Todo dentro da Div container.
+    //Coloca a Div container dentro dentro do corpo do HTML, na Div que contém todos os Todo.
+    divTodo.appendChild(divCircle);
+    divTodo.appendChild(pTodo);
+    divTodo.appendChild(imgIconCross);
+    divContainerTodos.appendChild(divTodo);
+    allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+
+    //Limpa o valor do Input
+    inputNewTodo.value = '';
+
+    setItem([]);//Limpa a todoList no localStorage.
+    setItem(allTodo);//Salva a nova todoList no localStorage.
+    todoVisible (visibleTodo);//Vai para a função que define quais Todo estarão visiveis.
+    displayTodoActive ();//Atualiza a quantidade de itens ativos.
+    Sortable()
+}
+//{text: "Todo" ,situation: "completed",id: "item1"}
+class Todo{
+    constructor(text, situation, id){
+        this.text = text;
+        this.situation = situation;
+        this.id = id;
     }
-
-    if(hasTouch()){
-        for(let i = 0; i < children.length; i++){
-            children[i].removeEventListener('touchend',markTodo);
-            children[i].addEventListener('touchend',markOffTodo);
-        }
-    }else{
-        for(let i = 0; i < children.length; i++){
-            children[i].removeEventListener('click',markTodo);
-            children[i].addEventListener('click',markOffTodo);
-        }
-    }
-
-    countActivesTodo ();
-
-    if(modeVar){
-        DarkMode ()
-    }else{
-        LightMode ();
-    }
-
-    switch(visible){
-        case 0: allVisible ();
-            break;
-        case 1: activeVisible ();
-            break;
-        case 2: completedVisible ();
-            break;
-    }
-
-    localStorage.setItem('CacheClear', false);
-
-    setTimeout(function() {
-        countActivesTodo ();
-    }, 200);
 }
 
-function markOffTodo () {
-    if(x === 1){
-        x = 0;
-        return;
-    }
 
-    let children = this.parentNode.children;
-    this.parentNode.classList.add('active');
-    this.parentNode.classList.remove('completed');
-
-    if(hasTouch()){
-        for(let i = 0; i < children.length; i++){
-            children[i].removeEventListener('touchend',markOffTodo);
-            children[i].addEventListener('touchend', markTodo);
+//---------------------Icone de Cruz Vísivel e Não Vísivel---------------------//
+//O ícone da cruz, responsável por apagar o todo, só fica vísivel quando o usuário passa o mouse por cima da div do Todo
+let allTodoDocument = document.querySelectorAll('div.divTodoItem');
+for(let i=0; i < allTodoDocument.length; i++){
+    allTodoDocument[i].addEventListener('mouseover', iconCross);
+    allTodoDocument[i].addEventListener('mouseout', iconCross);
+}
+function iconCross () {
+    const children = this.children;
+    for(let i=0; i < children.length; i++){
+        if(children[i].classList.contains('iconCross')){
+            //Se o ícone já tiver a classe "visible", então essa é removida, caso contrário, é adicionada.
+            children[i].classList.toggle('visible');
         }
-    }else{
-        for(let i = 0; i < children.length; i++){
-            children[i].removeEventListener('click',markOffTodo);
+    }
+}
+
+
+//-------------------------Marcar e Desmarcar um Todo-------------------------//
+//Adiciona o evento a todos as as divCircle.
+for(let i=0; i < allTodoDocument.length; i++){
+    const children = allTodoDocument[i].children;
+    for(let i=0; i < children.length; i++){
+        if (children[i].classList.contains("todoItem")) {
             children[i].addEventListener('click', markTodo);
         }
     }
-
-    for(let i=0; i<ToDos.length ; i++){
-        if(ToDos[i].id == this.parentNode.id){
-            ToDos[i].active = true;
-            setItem ();
-        }
-    }
-
-    countActivesTodo ();
-
-    if(modeVar){
-        DarkMode ()
-    }else{
-        LightMode ();
-    }
-
-    switch(visible){
-        case 0: allVisible ();
-            break;
-        case 1: activeVisible ();
-            break;
-        case 2: completedVisible ();
-            break;
-    }
-
-    localStorage.setItem('CacheClear', false);
-
-    setTimeout(function() {
-        countActivesTodo ();
-    }, 200);
 }
-
-function countActivesTodo (){
-    for(let i=0; i<10; i++){
-        let ActivesTodo = document.querySelectorAll('div.DivTodoItem.active');
-        let numberItensLeft = document.getElementById('numberItensLeft');
-        numberItensLeft.innerHTML = ActivesTodo.length;
-    }
-}
-
-
-spanAll.addEventListener('click', allVisible);
-function allVisible () {
-    visible = 0;
-    spanAll.setAttribute('class', 'spanActiveVisible');
-    spanActive.removeAttribute('class');
-    spanCompleted.removeAttribute('class');
-
-    let onlyActiveTodoVisible = document.querySelectorAll('div.DivTodoItem.completed');
-    for(let i = 0; i < onlyActiveTodoVisible.length; i++){
-        onlyActiveTodoVisible[i].setAttribute('class', 'DivTodoItem completed');
-    }
-
-    let onlyCompletedTodoVisible = document.querySelectorAll('div.DivTodoItem.active');
-    for(let i = 0; i < onlyCompletedTodoVisible.length; i++){
-        onlyCompletedTodoVisible[i].setAttribute('class', 'DivTodoItem active');
-    }
-
-    if(modeVar){
-        DarkMode ()
-    }else{
-        LightMode ();
-    }
-}
-
-spanActive.addEventListener('click', activeVisible);
-function activeVisible () {
-    visible = 1;
-    spanAll.removeAttribute('class');
-    spanActive.setAttribute('class', 'spanActiveVisible');
-    spanCompleted.removeAttribute('class');
-
-    let onlyActiveTodoVisible = document.querySelectorAll('div.DivTodoItem.completed');
-    for(let i = 0; i < onlyActiveTodoVisible.length; i++){
-        onlyActiveTodoVisible[i].setAttribute('class', 'DivTodoItem completed notVisible');
-    }
-
-    let onlyCompletedTodoVisible = document.querySelectorAll('div.DivTodoItem.active');
-    for(let i = 0; i < onlyCompletedTodoVisible.length; i++){
-        onlyCompletedTodoVisible[i].setAttribute('class', 'DivTodoItem active');
-    }
-
-    if(modeVar){
-        DarkMode ()
-    }else{
-        LightMode ();
-    }
-}
-
-spanCompleted.addEventListener('click', completedVisible);
-function completedVisible () {
-    visible = 2;
-    spanAll.removeAttribute('class');
-    spanActive.removeAttribute('class');
-    spanCompleted.setAttribute('class', 'spanActiveVisible');
-
-    let onlyActiveTodoVisible = document.querySelectorAll('div.DivTodoItem.completed');
-    for(let i = 0; i < onlyActiveTodoVisible.length; i++){
-        onlyActiveTodoVisible[i].setAttribute('class', 'DivTodoItem completed');
-    }
-
-    let onlyCompletedTodoVisible = document.querySelectorAll('div.DivTodoItem.active');
-    for(let i = 0; i < onlyCompletedTodoVisible.length; i++){
-        onlyCompletedTodoVisible[i].setAttribute('class', 'DivTodoItem active notVisible');
-    }
-
-    if(modeVar){
-        DarkMode ()
-    }else{
-        LightMode ();
-    }
-}
-
-    function IconCrossVisible () {
-        let children = this.children;
-        for(let i=0; i < children.length; i++){
-            if(children[i].classList == 'iconCross'){
-                children[i].classList.add('Visible')
+function markTodo() {
+    if (this.parentNode.classList.contains('active')) {
+        this.parentNode.classList.remove('active');
+        this.parentNode.classList.add('completed');
+        //Altera o valor da propriedade "situation" para completed.
+        for(let i=0; i < allTodo.length; i++){
+            if(allTodo[i].id == this.parentNode.id){
+                allTodo[i].situation = "completed";
             }
         }
-    }
-    function IconCrossNotVisible () {
-        let Visible = document.querySelector('img.iconCross.Visible');
-        Visible.classList.remove('Visible');
-    }
-
-clearComplete.addEventListener('click', ClearCompleteTodo);
-function ClearCompleteTodo () {
-    let completedTodo = document.querySelectorAll('div.DivTodoItem.completed');
-    const DivContainerTodos = document.getElementById('containerTodo');
-
-    for(let i = 0; i < completedTodo.length; i++){
-        DivContainerTodos.removeChild(completedTodo[i]);
-
-        ToDos.forEach(function(valor, index){
-            if(!valor.active){
-                SliceToDo (index);
+    }else if(this.parentNode.classList.contains('completed')){
+        this.parentNode.classList.remove('completed');
+        this.parentNode.classList.add('active');
+        //Altera o valor da propriedade "situation" para active.
+        for(let i=0; i < allTodo.length; i++){
+            if(allTodo[i].id == this.parentNode.id){
+                allTodo[i].situation = "active";
             }
-        })
+        }  
     }
-    localStorage.setItem('CacheClear', false);
+    setItem([]);//Limpa a todoList no localStorage.
+    setItem(allTodo);//Salva a nova todoList no localStorage.
+    todoVisible (visibleTodo);//Vai para a função que define quais Todo estarão visiveis.
+    displayTodoActive ();//Atualiza a quantidade de itens ativos.
 }
 
-function clearTodo () {
-    ToDos = getItem();
-    let parent = this.parentNode;
-    DivContainerTodos.removeChild(parent);
 
-    ToDos.forEach(function(valor, index){
-        if(valor.id == parent.id){
-            SliceToDo (index);
+//---------------------Deletar um Todo qualquer ou todos os Todo Completados---------------------//
+for(let i=0; i < allTodoDocument.length; i++){
+    const children = allTodoDocument[i].children;
+    for(let i=0; i < children.length; i++){
+        if (children[i].classList.contains("iconCross")) {
+            children[i].addEventListener('click', deleteTodo);
+        }
+    }
+}
+function deleteTodo () {
+    const id = this.parentNode.id;
+    divContainerTodos.removeChild(this.parentNode);
+    allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+
+    allTodo.forEach(function(value, index){
+        if(value.id == id){
+            allTodo.splice(index, 1);
         }
     })
-    countActivesTodo ();
-    localStorage.setItem('CacheClear', false);
+    setItem([]);//Limpa a todoList no localStorage.
+    setItem(allTodo);//Salva a nova todoList no localStorage.
+    displayTodoActive ();//Atualiza a quantidade de itens ativos.
 }
+
+//Remove todos os Todo completados.
+const buttonClearAllCompletedTodo = document.getElementById('buttonClearComplete');
+buttonClearAllCompletedTodo.addEventListener('click', deleteAllCompletedTodo);
+function deleteAllCompletedTodo () {
+    const allcompletedTodo = document.querySelectorAll('div.divTodoItem.completed');
+    allcompletedTodo.forEach(function(value){
+        divContainerTodos.removeChild(value);
+        allTodo.forEach(function(valueAll, index){
+            if(valueAll.id == value.id){
+                allTodo.splice(index, 1);
+            }
+        })
+    })
+    setItem([]);//Limpa a todoList no localStorage.
+    setItem(allTodo);//Salva a nova todoList no localStorage.
+}
+
+
+//--------------------Atualiza a Quantidade de Itens Ativos--------------------//
+function displayTodoActive () {
+    const numberItensLeft = document.getElementById('numberItensLeft');
+    const activeTodo = document.querySelectorAll('div.divTodoItem.active');
+    numberItensLeft.innerHTML = activeTodo.length;
+}
+
+
+//--------------------Define quais Todo devem ficar visiveis--------------------//
+let visibleTodo = 'all';//Define por padrão que todos os Todo devem ficar visiveis.
+const buttonAllVisible = document.getElementById('buttonAll');
+const buttonActiveVisible = document.getElementById('buttonActive');
+const buttonCompleted = document.getElementById('buttonCompleted');
+buttonAllVisible.addEventListener('click', function () {todoVisible ("all")});
+buttonActiveVisible.addEventListener('click', function () {todoVisible ("active")});
+buttonCompleted.addEventListener('click', function () {todoVisible ("completed")});
+function todoVisible (visible) {
+    visibleTodo = visible; 
+    switch (visible) {
+        case 'all':
+            buttonAllVisible.classList.add('buttonVisible');
+            buttonActiveVisible.classList.remove('buttonVisible');
+            buttonCompleted.classList.remove('buttonVisible');
+
+            allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+            allTodoDocument.forEach(function(value){
+                value.classList.remove('notVisible');
+            })
+            break;
+        case 'active':
+            buttonAllVisible.classList.remove('buttonVisible');
+            buttonActiveVisible.classList.add('buttonVisible');
+            buttonCompleted.classList.remove('buttonVisible');
+
+            allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+            allTodoDocument.forEach(function(value){
+                if(value.classList.contains('active')){
+                    value.classList.remove('notVisible');
+                }else if(value.classList.contains('completed')){
+                    value.classList.add('notVisible');
+                }
+            })
+            break;
+        case 'completed':
+            buttonAllVisible.classList.remove('buttonVisible');
+            buttonActiveVisible.classList.remove('buttonVisible');
+            buttonCompleted.classList.add('buttonVisible');
+
+            allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+            allTodoDocument.forEach(function(value){
+                if(value.classList.contains('active')){
+                    value.classList.add('notVisible');
+                }else if(value.classList.contains('completed')){
+                    value.classList.remove('notVisible');
+                }
+            })
+            break;
+        default:
+            break;
+    }
+}
+
 
 const getItem = () => JSON.parse(localStorage.getItem('todoList')) ?? [];
+const setItem = (value) => localStorage.setItem('todoList', JSON.stringify(value));
 
-function setItem () {
-    ToDos.forEach(function(valor, indice){
-        valor.id = 'item'+indice;
-    });
 
-    let allTodo = document.querySelectorAll('div.DivTodoItem');
-    for(let i=0; i < ToDos.length; i++){
-        allTodo[i].id = `item${i}`;
-    }
 
-    localStorage.setItem('todoList', JSON.stringify(ToDos));
-    ToDos = getItem();
+//-------------------------Ao carregar a página mantém a todoList e o modo-------------------------//
+function loadBody () {
+    loadMode ();//Carrega o tema de cor salvo pelo usuário.
+    loadTodoList ();//Carrega a todoList na página.
+    todoVisible ("all");//Define que todos os todo são visiveis.
+    displayTodoActive ();//Atualiza a quantidade de itens ativos.
+    Sortable()
 }
 
-function PushToDo (texto, ativo) {
-    ToDos.push({text: texto, active: ativo, id: 'item'+Number(ToDos.length)});
-    setItem ();
+function loadTodoList () {
+    if(localStorage.getItem('todoList') == null){
+        allTodo = [
+            {text: 'Jog around the park 3x', situation: "completed", id: 'item1'},
+            {text: '10 minutes meditation', situation: "active", id: 'item2'},
+            {text: 'Read for 1 hour', situation: "active", id: 'item3'},
+            {text: 'Pick up groceries', situation: "active", id: 'item4'},
+            {text: 'Complete Todo App on Frontend Mentor', situation: "active", id: 'item5'}
+        ]
+     }else{
+        allTodo = getItem();
+     }
+
+    allTodo.forEach(function(value){
+        //Cria todos os elementos presentes em uma Div Todo.
+        const divTodo = document.createElement('div');
+        const divCircle = document.createElement('div');
+        const pTodo = document.createElement('p');
+        const imgIconCross = document.createElement('img');
+
+        //Seta os Atributos e Funções da Div container.
+        divTodo.classList.add('divTodoItem');
+        divTodo.classList.add(value.situation);
+        divTodo.setAttribute('draggable', 'true');
+        divTodo.setAttribute('id', value.id);
+        divTodo.addEventListener("mouseover", iconCross);
+        divTodo.addEventListener("mouseout", iconCross);
+
+        //Seta os Atributos da Div Circle.
+        divCircle.classList.add('circle');
+        divCircle.classList.add('todoItem');
+        divCircle.addEventListener('click', markTodo);
+
+        //Seta os Atributos do Paragrafo da Div Todo.
+        pTodo.classList.add('todoItem')
+        pTodo.addEventListener('click', markTodo);
+        pTodo.innerHTML = value.text;
+
+        //Seta os Atributos da Imagem Cross.
+        imgIconCross.src = 'images/icon-cross.svg';
+        imgIconCross.setAttribute('alt', 'icon-cross');
+        imgIconCross.classList.add('iconCross');
+        imgIconCross.addEventListener('click', deleteTodo);
+
+
+        //Coloca todos os elementos do Todo dentro da Div container.
+        //Coloca a Div container dentro dentro do corpo do HTML, na Div que contém todos os Todo.
+        divTodo.appendChild(divCircle);
+        divTodo.appendChild(pTodo);
+        divTodo.appendChild(imgIconCross);
+        divContainerTodos.appendChild(divTodo);
+        allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+        })
 }
 
-function SliceToDo (index) {
-    ToDos.splice(index, 1);
-    setItem ();
-}
-
-//Eventos do Mouse
-DivContainerTodos.addEventListener('mouseenter', reorganizarToDos);
-DivContainerTodos.addEventListener('mouseout', reorganizarToDos);
-DivContainerTodos.addEventListener('mousemove', reorganizarToDos);
-DivContainerTodos.addEventListener('mousedown', reorganizarToDos);
-DivContainerTodos.addEventListener('mouseup', reorganizarToDos);
-
-
-function reorganizarToDos(){
-    let allTodo = document.querySelectorAll('div.DivTodoItem');
-    ToDos = getItem();
-    for(let i=0; i < allTodo.length; i++){
+function loadMode () {
+    const imgButton = document.getElementById('iconMode');//Ícone do botão de alternar modo.
+    const linkCSS = document.getElementById('modeCSS');//link do arquivo CSS com as variáveis.
+    if (localStorage.getItem('mode') == 'light') {
+        mode = 'light';
+        linkCSS.href = "styles/lightMode.css";
+        imgButton.src = "images/icon-moon.svg";
+    }else if(localStorage.getItem('mode') == 'dark'){
+        mode = 'dark';
+        linkCSS.href = "styles/darkMode.css";
+        imgButton.src = "images/icon-sun.svg";
+        /*
+        //Aguarda carregar o modo claro e depois vai para o escuro.
+        mode = 'light';
         setTimeout(function() {
-                if(allTodo.length == ToDos.length){
-                    if(allTodo[i].id !== ToDos[i].id){
-                    for(let i=0; i<allTodo.length; i++){
-                        if(allTodo[i].classList.contains("active") == true){
-                            ToDos[i] = {text: allTodo[i].innerText, active: true, id: allTodo[i].id};
-                        }else{
-                            ToDos[i] = {text: allTodo[i].innerText, active: false, id: allTodo[i].id};
-                        }
-                    }
-                    setItem ();
-                    localStorage.setItem('CacheClear', false);
-                }}
-        }, 200);
+                changeMode();
+        }, 400);*/
     }
-  }
+}
 
-  //Eventos TouchScreen
-DivContainerTodos.addEventListener('touchstart', reorganizaToDosPhone);
-DivContainerTodos.addEventListener('touchend', reorganizaToDosPhone);
-DivContainerTodos.addEventListener('touchmove', reorganizaToDosPhone);
-DivContainerTodos.addEventListener('touchmove', CancelEventMarkTodo);
-DivContainerTodos.addEventListener('touchcancel', reorganizaToDosPhone);
 
-function reorganizaToDosPhone () {
-    reorganizarToDos();
+//Drag and Drop to Reorder
+let dragged = null;
+function Sortable() {
+    allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+
+    for(let i of allTodoDocument){
+        i.addEventListener('dragstart', dragStart);
+        i.addEventListener('dragenter', dragEnter);
+        i.addEventListener('dragover', dragEnd);
+
+        i.addEventListener('touchstart', touchStart);
+        i.addEventListener('touchend', touchEnd);
+    }
+}
+
+
+//Drag and Drop to Reorder List in Computer
+function dragStart() {
+    dragged = this;
+}
+function dragEnter() {      
+    if(this != dragged){
+        allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+        let draggedPos = 0; let droppedPos = 0;//Posição do item dragged e posição do item dropped
+
+        for (let it = 0; it < allTodoDocument.length; it++) {
+            if(dragged == allTodoDocument[it]){
+                draggedPos = it;
+            }
+            if(this == allTodoDocument[it]){
+                droppedPos = it;
+            }
+
+            if(draggedPos < droppedPos){
+                //Se o item dragged estiver atrás do item dropped.
+                this.parentNode.insertBefore(dragged, this.nextSibling);//Coloca o item dragged depois do item dropped
+            }else{
+                //Se o item pego estiver na dragged do item dropped.
+                this.parentNode.insertBefore(dragged, this);//Coloca o item dragged antes do item dropped
+            }
+        }
+    }
+}
+function dragEnd(e) {
+    e.preventDefault();
+    setTimeout(function() {
+        reorderVarTodoList();
+    }, 200);
+}
+
+
+
+
+
+//Drag and Drop to Reorder List in Phone.
+//Declaraçãos das Variáveis usadas nas próximas três funções.
+let ThisMinY;//posição Y do começo do todo.
+let ThisMaxY;//posição Y do final do todo.
+let y;//Posição Y de onde o toque ocorreu
+let currentY;//Posição Y atual durante um touchmove
+function touchStart(e){
+    //Quando ocorre um toque em um todo.
+    document.body.style.overflow = 'hidden';
+
+    y = e.touches[0].clientY;//pega a posição de onde ocorreu o toque.
+    ThisMinY = this.getBoundingClientRect().y;
+    ThisMaxY = this.getBoundingClientRect().y + this.getBoundingClientRect().height;
+
+    this.addEventListener('touchmove', touchMove);
+}
+
+function touchMove (e){
+    currentY = e.changedTouches[0].clientY;//Atualiza o currentY
+
+    //Se a direção do touchmove for para cima no primeiro todo (não tem nenhum todo acima então não terá como reordenar)
+    //ou a direção for para baixo no ultimo todo (não tem nenhum todo abaixo então não terá como reordenar)
+    if ((currentY<ThisMinY && this === allTodoDocument[0]) || (currentY>ThisMaxY && this === allTodoDocument[allTodoDocument.length-1])){
+        return;//Cancela a função
+    }
+
+    //Troca a posição do todo com o todo abaixo dele.
+    if((currentY>ThisMaxY)){
+        //Armazena o valor do todo abaixo do atual.
+        let numberItem = parseInt(this.id.substr(4));
+        let nextChild = document.getElementById('item'+(numberItem+1));
+
+        //Troca a posição.
+        this.parentNode.insertBefore(nextChild, this);
+
+        //Troca os Ids.
+        let id = this.id;
+        this.id = nextChild.id;
+        nextChild.id = id;
+
+        //Atualiza variáveis.
+        ThisMinY = this.getBoundingClientRect().y;
+        ThisMaxY = this.getBoundingClientRect().y + this.getBoundingClientRect().height;
+        currentY = e.changedTouches[0].clientY;
+        allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+    }
+
+    //Troca a posição do todo com o todo acima dele.
+    if((currentY<ThisMinY)){
+        //Armazena o valor do todo acima do atual.
+        let numberItem = parseInt(this.id.substr(4));
+        let previousChild = document.getElementById('item'+(numberItem-1));
+        this.parentNode.insertBefore(previousChild, this.nextSibling);
+
+        //Troca os Ids.
+        let id = this.id;
+        this.id = previousChild.id;
+        previousChild.id = id;
+
+        //Atualiza variáveis.
+        ThisMinY = this.getBoundingClientRect().y;
+        ThisMaxY = this.getBoundingClientRect().y + this.getBoundingClientRect().height;
+        currentY = e.changedTouches[0].clientY;
+        allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+    }
+}
+function touchEnd(e){
+    setTimeout(function() {
+        document.body.style.overflow = null;
+    }, 100);
 
     setTimeout(function() {
-        reorganizarToDos();
+        reorderVarTodoList();
     }, 200);
 
-    setTimeout(function() {
-        reorganizarToDos();
-    }, 400);
-
-    setTimeout(function() {
-        reorganizarToDos();
-    }, 600);
-
-    setTimeout(function() {
-        reorganizarToDos();
-    }, 800);
-
-    setTimeout(function() {
-        reorganizarToDos();
-    }, 1000);
+    this.removeEventListener('touchmove', touchMove);
 }
 
 
-//O usuário pode reorganizar e marcar/desmarcar um ToDo ao mesmo tempo, e nisso a ação de reorganizar é cancelada
-//Para resolver isso eu cancelei a ação de marcar/desmarcar quando ocorrer um evento touchmove
-//quando a variável x valer 1, os evento markTodo e MarkOffTodo serão encerrados no inicio e a variável x receberá o valor 0
-//e quando o usuário remover o dedo a variável x também receberá 0
-function CancelEventMarkTodo () {
-    x = 1;
-    DivContainerTodos.addEventListener('touchend', ReactivateEventMarkTodo);
-}
-let x = 0;
 
-function ReactivateEventMarkTodo () {
-    x = 0;
-    DivContainerTodos.removeEventListener('touchend', ReactivateEventMarkTodo);
+//Atualiza as variáveis relacionadas aos todo quando a lista é reordenada.
+function reorderVarTodoList () {
+    allTodoDocument = document.querySelectorAll('div.divTodoItem');//Atualiza a variável que recebe todos os Todo.
+    allTodo = [];
+    let al = 0;
+    for (let i of allTodoDocument) {
+        al++;
+        let text = i.innerText;
+        let situation = i.classList.contains('active')?'active':'completed';
+        allTodo.push(new Todo(text, situation, 'item'+al));
+        i.id = 'item'+al;
+    }
+    setItem([]);//Limpa a todoList no localStorage.
+    setItem(allTodo);//Salva a nova todoList no localStorage.
 }

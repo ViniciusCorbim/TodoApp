@@ -9,7 +9,7 @@
 body{
     background-color: var(--colorBackground);
     background-image: var(--imageURL);
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
 }
 
 
@@ -237,8 +237,8 @@ div.buttonsDisplayTodo{
     font-weight: 700;
 }
 .buttonVisible{
-    color: var(--primaryColor1) !IMPORTANT;
-    font-weight: normal !IMPORTANT;
+    color: var(--primaryColor1) !important;
+    font-weight: normal !important;
 }
 
 
